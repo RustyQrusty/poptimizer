@@ -2,12 +2,13 @@ import pandas as pd
 import pytest
 import torch
 
-from poptimizer.dl import data_loader, exceptions
+import poptimizer.dl.data_loaders
+from poptimizer.dl import exceptions, data_loaders
 
 
 @pytest.fixture(name="days")
 def make_days():
-    return data_loader.DataDays(
+    return data_loaders.DataDays(
         history=4,
         forecast=2,
         test=3,
@@ -223,7 +224,7 @@ class TestOneTickerData:
 def test_train_data_loader(one_ticker_data):
     batch_size = 1024
 
-    loader = data_loader.train(
+    loader = poptimizer.dl.data_loaders.train(
         [one_ticker_data for _ in range(batch_size)],
         batch_size,
     )
@@ -267,7 +268,7 @@ def make_bad_second_ticker_data():
 
 def test_test_length_missmatch_error(one_ticker_data, bad_second_ticker_data):
     with pytest.raises(exceptions.FeaturesError):
-        data_loader.test(
+        poptimizer.dl.data_loaders.test(
             [one_ticker_data, bad_second_ticker_data],
         )
 
@@ -286,7 +287,7 @@ def make_second_ticker_data(days):
 
 @pytest.fixture(name="test_data_loader")
 def make_test_data_loader(one_ticker_data, second_ticker_data):
-    return data_loader.test(
+    return poptimizer.dl.data_loaders.test(
         [one_ticker_data, second_ticker_data],
     )
 
@@ -335,7 +336,7 @@ class TestTestDataLoader:
 
 
 def test_forecast_data_loader(one_ticker_data, second_ticker_data):
-    loader = data_loader.forecast(
+    loader = poptimizer.dl.data_loaders.forecast(
         [one_ticker_data, second_ticker_data, one_ticker_data],
     )
 
