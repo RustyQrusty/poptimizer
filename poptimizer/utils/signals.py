@@ -25,7 +25,6 @@ async def suppressor(logger: logging.Logger) -> AsyncIterator[asyncio.Event]:
     try:
         yield stop_event
     finally:
-
         for remove_sig in _SIGNALS:
             loop.remove_signal_handler(remove_sig)
 

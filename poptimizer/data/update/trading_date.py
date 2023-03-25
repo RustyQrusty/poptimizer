@@ -12,7 +12,6 @@ from poptimizer.data import exceptions
 
 
 class _TradingDate(domain.Row):
-
     date: datetime = Field(alias="till")
 
 

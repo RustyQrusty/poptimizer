@@ -129,7 +129,7 @@ class Trainer:
         steps_per_epoch = len(train_dl)
         total_steps = 1 + int(steps_per_epoch * scheduler.epochs)
 
-        sch = torch.optim.lr_scheduler.OneCycleLR(  # type: ignore[attr-defined]
+        sch = torch.optim.lr_scheduler.OneCycleLR(
             optimizer,
             max_lr=scheduler.max_lr,
             total_steps=total_steps,
@@ -179,7 +179,7 @@ def _prepare_net(state: bytes | None, desc: DLModel) -> wave_net.Net:
 
     if state is not None:
         buffer = io.BytesIO(state)
-        state_dict = torch.load(buffer, map_location=consts.DEVICE)  # type: ignore[no-untyped-call]
+        state_dict = torch.load(buffer, map_location=consts.DEVICE)
         net.load_state_dict(state_dict)
 
     return net

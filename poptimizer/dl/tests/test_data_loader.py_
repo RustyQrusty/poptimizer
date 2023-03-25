@@ -3,7 +3,7 @@ import pytest
 import torch
 
 import poptimizer.dl.data_loaders
-from poptimizer.dl import exceptions, data_loaders
+from poptimizer.dl import data_loaders, exceptions
 
 
 @pytest.fixture(name="days")

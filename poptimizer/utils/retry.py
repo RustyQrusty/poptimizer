@@ -51,7 +51,7 @@ class AsyncExponential:
                 try:
                     return await func(*args, **kwargs)
                 except self._exceptions as err:
-                    self._logger.debug(f"attempt %d -> %s", count, err)
+                    self._logger.debug("attempt %d -> %s", count, err)
 
                     last_exc = err
 
