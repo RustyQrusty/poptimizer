@@ -88,7 +88,7 @@ class Updater:
             else:
                 self._factor = 1
 
-            aws = (stop_event.wait(),)
+            aws = (asyncio.create_task(stop_event.wait()),)
             await asyncio.wait(
                 aws,
                 timeout=_CHECK_INTERVAL.total_seconds() * self._factor,
