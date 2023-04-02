@@ -28,7 +28,7 @@ class HTTPClient(BaseSettings):
     con_per_host: int = Field(default=_MAX_ISS_REQUESTS, gt=0)
 
 
-class Resources(BaseModel):
+class Cfg(BaseModel):
     """Настройки приложения."""
 
     logger: Logger = Logger()

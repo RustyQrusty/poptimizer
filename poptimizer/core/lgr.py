@@ -60,7 +60,7 @@ class _ColorFormatter(logging.Formatter):
         return super().formatMessage(record)
 
 
-def config(app: actor.App, level: int = logging.INFO) -> None:
+def config(app: actor.App, level: int | str = logging.INFO) -> None:
     """Настраивает логирование в stdout."""
     stream_handler = _TelegramHandler(app)
     stream_handler.setFormatter(_ColorFormatter())
