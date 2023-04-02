@@ -16,3 +16,7 @@ class POError(Exception):
             errs.append(repr(cause_err))
 
         return " -> ".join(errs)
+
+
+class DataUpdateError(POError):
+    """Ошибка сервисов обновления данных."""
