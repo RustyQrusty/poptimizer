@@ -5,7 +5,7 @@ import types
 from copy import copy
 from typing import Final, Literal, TextIO
 
-from poptimizer.core import actor
+from poptimizer.app import actor
 
 COLOR_MSG: Final = "color_msg"
 _LOGGER_NAME_SIZE: Final = 11

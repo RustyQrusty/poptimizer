@@ -5,7 +5,7 @@ from typing import Final
 
 import aiohttp
 
-from poptimizer.core import actor
+from poptimizer.app import actor
 
 _MAX_TELEGRAM_MSG_SIZE: Final = 4096
 
