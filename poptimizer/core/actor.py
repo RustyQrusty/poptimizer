@@ -67,7 +67,8 @@ class _Context:
     ) -> None:
         self._ref = Ref(actor)
         self._dispatcher = dispatcher
-        self._actor = asyncio.create_task(self._runner(actor))
+        inbox = dispatcher.register(self._ref)
+        self._actor = asyncio.create_task(self._runner(actor, inbox))
         self._children: set[_Context] = set()
 
     @property
@@ -94,10 +95,9 @@ class _Context:
         """Передает сообщение по указанной ссылке."""
         self._dispatcher.send(msg, to)
 
-    async def _runner(self, actor: Actor) -> None:
+    async def _runner(self, actor: Actor, inbox: asyncio.Queue[Any]) -> None:
         validator = pydantic.validate_arguments(config={"arbitrary_types_allowed": True})
         validated_actor = validator(actor.__call__)  # noqa: WPS609
-        inbox = self._dispatcher.register(self._ref)
         inbox.put_nowait(SystemMsg.STARTING)
 
         stopping = False
