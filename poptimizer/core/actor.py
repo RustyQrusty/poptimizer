@@ -1,11 +1,14 @@
-"""Асинхронные акторы."""
+"""Асинхронные акторы.
+
+Отдельные модули приложения запускаются в виде акторов, которые могут посылать сообщения другим компонентам.
+"""
 from __future__ import annotations
 
 import asyncio
 import logging
 import weakref
 from enum import StrEnum, auto
-from typing import Any, Protocol, runtime_checkable, Final
+from typing import Any, Final, Protocol, runtime_checkable
 
 import pydantic
 
