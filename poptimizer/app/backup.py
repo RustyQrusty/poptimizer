@@ -1,7 +1,7 @@
 """Актор, который восстанавливает и сохраняет бекап данных."""
 import logging
 from pathlib import Path
-from typing import ClassVar, Iterable, cast, Final
+from typing import ClassVar, Final, Iterable, cast
 
 import aiofiles
 import bson
@@ -28,7 +28,7 @@ class Backup:
             case actor.SystemMsg.STARTING:
                 await self.restore(_BACKUP_COLLECTIONS)
             case domain.Group():
-                await self.backup((msg, ))
+                await self.backup((msg,))
 
     async def restore(self, groups: Iterable[domain.Group]) -> None:
         """Восстанавливает резервную копию группы объектов при отсутствии данных в MongoDB."""

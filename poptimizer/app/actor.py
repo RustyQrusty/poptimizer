@@ -106,7 +106,7 @@ class _Context:
             msg = await inbox.get()
 
             if isinstance(msg, SystemMsg):
-                _Logger.info("%s %s", msg, self._ref)
+                _Logger.info("%s %s", self._ref, msg)
                 stopping = msg == SystemMsg.STOPPING
             try:
                 await validated_actor(self, msg)
@@ -115,8 +115,8 @@ class _Context:
                     _Logger.warning("%s can't process %s -> %s", self._ref, msg, err)
             except Exception as err:
                 _Logger.warning("%s can't process %s -> %s", self._ref, msg, err)
-            finally:
-                inbox.task_done()
+
+            inbox.task_done()
 
         _Logger.info("%s stopped", self._ref)
 

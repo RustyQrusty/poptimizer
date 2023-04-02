@@ -3,7 +3,7 @@ import asyncio
 
 import uvloop
 
-from poptimizer.app import actor, clients, config, lgr, telegram, backup
+from poptimizer.app import actor, backup, clients, config, lgr, telegram
 
 
 async def main() -> None:
