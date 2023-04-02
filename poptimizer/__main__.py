@@ -3,7 +3,7 @@ import asyncio
 
 import uvloop
 
-from poptimizer.core import actor, clients, config, lgr, telegram
+from poptimizer.app import actor, clients, config, lgr, telegram, backup
 
 
 async def main() -> None:
@@ -22,6 +22,7 @@ async def main() -> None:
             ),
         )
         lgr.config(app, cfg.logger.level)
+        app.spawn(backup.Backup(mongo))
 
         await app.join()
 
