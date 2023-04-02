@@ -134,23 +134,11 @@ class _Dispatcher:
             _Logger.warning("can't deliver %s to %s", msg, to)
 
 
-class App:
+class App(_Context):
     """Приложение для запуска акторов."""
 
-    def __init__(self) -> None:
-        self._dispatcher = _Dispatcher()
-        self._ctx = _Context(self._dispatcher, self)
-
-    async def __call__(self, ctx: Ctx, msg: Any) -> None:
-        """Приложение является корневым актором."""
-
-    def send(self, msg: Any, to: Ref) -> None:
-        """Послать сообщение по заданной ссылке."""
-        self._dispatcher.send(msg, to)
-
-    def spawn(self, actor: Actor) -> Ref:
-        """Запускает дочернего актора и возвращает ссылку на него."""
-        return self._ctx.spawn(actor)
+    def __init__(self, root: Actor) -> None:
+        super().__init__(_Dispatcher(), root)
 
     async def join(self) -> None:
         """Ждет CancelledError и завершает работу акторов."""
@@ -158,4 +146,4 @@ class App:
             await asyncio.Event().wait()
         except asyncio.CancelledError:
             _Logger.info("shutdown signal received...")
-            await self._ctx.shutdown()
+            await self.shutdown()
