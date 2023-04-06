@@ -12,6 +12,7 @@ class Logger(BaseSettings):
     """Настройки логирования - сообщения выше уровня INFO дублируются в Телеграм."""
 
     level: int | str = logging.INFO
+    telegram_level: int | str = logging.WARNING
     telegram_token: str
     telegram_chat_id: str
 

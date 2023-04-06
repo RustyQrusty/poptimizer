@@ -17,6 +17,7 @@ async def main() -> None:
         app = actor.App(
             telegram.Telegram(
                 http,
+                cfg.logger.telegram_level,
                 cfg.logger.telegram_token,
                 cfg.logger.telegram_chat_id,
             ),

@@ -13,13 +13,13 @@ _MAX_TELEGRAM_MSG_SIZE: Final = 4096
 class Telegram:
     """Актор для отправки сообщений логера в Телеграм."""
 
-    def __init__(self, client: aiohttp.ClientSession, token: str, chat_id: str, level: int = logging.WARNING) -> None:
+    def __init__(self, client: aiohttp.ClientSession, level: int | str, token: str, chat_id: str) -> None:
         self._logger = logging.getLogger("Telegram")
         self._client = client
+        self._level = level
         self._api_url = f"https://api.telegram.org/bot{token}/SendMessage"
         self._chat_id = chat_id
         self._fmt = "<strong>{name}</strong>\n{message}"
-        self._level = level
 
     async def __call__(self, ctx: actor.Ctx, msg: logging.LogRecord) -> None:
         """Посылает сообщения в телеграм с уровнем логирования начиная с заданного.
