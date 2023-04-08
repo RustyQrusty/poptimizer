@@ -7,8 +7,7 @@ import aiofiles
 import bson
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from poptimizer.app import actor
-from poptimizer.core import consts, domain
+from poptimizer.core import actor, consts, domain
 
 _BACKUP_COLLECTIONS: Final = (domain.Group.RAW_DIV,)
 

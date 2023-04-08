@@ -137,7 +137,7 @@ class _Dispatcher:
             _Logger.warning("can't deliver %s to %s", msg, to)
 
 
-class App(_Context):
+class Root(_Context):
     """Приложение для запуска акторов."""
 
     def __init__(self, root: Actor) -> None:

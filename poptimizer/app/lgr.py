@@ -5,7 +5,7 @@ import types
 from copy import copy
 from typing import Final, Literal, TextIO
 
-from poptimizer.app import actor
+from poptimizer.core import actor
 
 COLOR_MSG: Final = "color_msg"
 _LOGGER_NAME_SIZE: Final = 11
@@ -13,7 +13,7 @@ _MAX_TELEGRAM_MSG_SIZE: Final = 4096
 
 
 class _TelegramHandler(logging.StreamHandler[TextIO]):
-    def __init__(self, app: actor.App) -> None:
+    def __init__(self, app: actor.Root) -> None:
         super().__init__(sys.stdout)
         self._app = app
 
@@ -60,7 +60,7 @@ class _ColorFormatter(logging.Formatter):
         return super().formatMessage(record)
 
 
-def config(app: actor.App, level: int | str = logging.INFO) -> None:
+def config(app: actor.Root, level: int | str = logging.INFO) -> None:
     """Настраивает логирование в stdout."""
     stream_handler = _TelegramHandler(app)
     stream_handler.setFormatter(_ColorFormatter())

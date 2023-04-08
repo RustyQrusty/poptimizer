@@ -3,7 +3,8 @@ import asyncio
 
 import uvloop
 
-from poptimizer.app import actor, backup, clients, config, lgr, telegram
+from poptimizer.app import backup, clients, config, lgr, telegram
+from poptimizer.core import actor
 
 
 async def main() -> None:
@@ -16,7 +17,7 @@ async def main() -> None:
     async with (  # noqa:  WPS316
         clients.http(cfg.http_client.con_per_host) as http,
         clients.mongo(cfg.mongo.uri) as mongo,
-        actor.App(
+        actor.Root(
             telegram.Telegram(
                 http,
                 cfg.logger.telegram_level,

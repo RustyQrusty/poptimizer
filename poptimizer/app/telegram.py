@@ -6,7 +6,7 @@ from typing import Final
 
 import aiohttp
 
-from poptimizer.app import actor
+from poptimizer.core import actor
 
 _MAX_TELEGRAM_MSG_SIZE: Final = 4096
 _level_num: Final = types.MappingProxyType(
