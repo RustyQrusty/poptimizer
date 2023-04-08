@@ -1,6 +1,7 @@
 """Актор для отправки сообщений в Телеграм."""
 import html
 import logging
+import types
 from typing import Final
 
 import aiohttp
@@ -8,6 +9,17 @@ import aiohttp
 from poptimizer.app import actor
 
 _MAX_TELEGRAM_MSG_SIZE: Final = 4096
+_level_num: Final = types.MappingProxyType(
+    {
+        "CRITICAL": logging.CRITICAL,
+        "FATAL": logging.FATAL,
+        "ERROR": logging.ERROR,
+        "WARN": logging.WARNING,
+        "WARNING": logging.WARNING,
+        "INFO": logging.INFO,
+        "DEBUG": logging.DEBUG,
+    },
+)
 
 
 class Telegram:
@@ -16,7 +28,13 @@ class Telegram:
     def __init__(self, client: aiohttp.ClientSession, level: int | str, token: str, chat_id: str) -> None:
         self._logger = logging.getLogger("Telegram")
         self._client = client
-        self._level = level
+
+        match level:
+            case int():
+                self._level = level
+            case str():
+                self._level = _level_num.get(level, logging.INFO)
+
         self._api_url = f"https://api.telegram.org/bot{token}/SendMessage"
         self._chat_id = chat_id
         self._fmt = "<strong>{name}</strong>\n{message}"
