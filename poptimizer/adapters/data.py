@@ -27,7 +27,7 @@ class Columns(StrEnum):  # noqa: WPS600
     TURNOVER = "TURNOVER"
 
 
-class MarketData:
+class Adapter:
     """Позволяет внешним модулям просматривать рыночную информацию в удобном виде."""
 
     def __init__(self, repo: repository.Repo) -> None:

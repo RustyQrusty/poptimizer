@@ -61,7 +61,7 @@ class Service:
         self,
         repo: repository.Repo,
         session: aiohttp.ClientSession,
-        portfolio_adapter: portfolio.PortfolioData,
+        portfolio_adapter: portfolio.Adapter,
     ) -> None:
         self._logger = logging.getLogger("Status")
         self._repo = repo

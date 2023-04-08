@@ -2,7 +2,7 @@
 import aiohttp
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from poptimizer.adapters.portfolio import PortfolioData
+from poptimizer.adapters.portfolio import Adapter
 from poptimizer.app import config, lgr, telegram
 from poptimizer.core import actor, repository
 from poptimizer.data import updater
@@ -29,7 +29,7 @@ def create_updater(http: aiohttp.ClientSession, mongo: AsyncIOMotorClient) -> up
     """Создает сервис обновления данных."""
     repo = repository.Repo(mongo)
 
-    portfolio_data = PortfolioData(repo)
+    portfolio_data = Adapter(repo)
 
     return updater.Updater(
         trading_date.Service(repo, http),
