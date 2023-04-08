@@ -1,6 +1,6 @@
 """Описание доменных объектов."""
 from datetime import datetime
-from enum import Enum, unique
+from enum import Enum, StrEnum, unique
 from typing import ClassVar, Final, Generic, TypeVar
 
 from pydantic import BaseModel, Field, validator
@@ -50,15 +50,11 @@ class Group(Enum):
 
 
 @unique
-class Currency(str, Enum):  # noqa: WPS600
+class Currency(StrEnum):
     """Валюты."""
 
     RUR = "RUR"
     USD = "USD"
-
-    def __str__(self) -> str:
-        """Отображение в виде значения."""
-        return self.value
 
 
 class Row(BaseModel):
