@@ -31,9 +31,6 @@ class Ref:
 class Ctx(Protocol):
     """Контекст обработки сообщения актором."""
 
-    def __str__(self) -> str:
-        """Наименование контекста."""
-
     def spawn(self, actor: Actor) -> Ref:
         """Запустить дочернего актора."""
 

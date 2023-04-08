@@ -172,3 +172,7 @@ class DataUpdateError(POError):
         )
 
         return _ExponentialRetryer(policy, logger)
+
+
+class ClientError(POError):
+    """Ошибки обусловленные некорректными данными, переданными web-клиентом."""
