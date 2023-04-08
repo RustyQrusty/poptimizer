@@ -8,7 +8,8 @@ import asyncio
 import logging
 import weakref
 from enum import StrEnum, auto
-from typing import Any, Final, Protocol, runtime_checkable
+from types import TracebackType
+from typing import Any, Final, Protocol, Self, runtime_checkable
 
 import pydantic
 
@@ -142,10 +143,19 @@ class App(_Context):
     def __init__(self, root: Actor) -> None:
         super().__init__(_Dispatcher(), root)
 
-    async def join(self) -> None:
-        """Ждет CancelledError и завершает работу акторов."""
+    async def __aenter__(self) -> Self:
+        """Контекстный менеджер ждет CancelledError и завершает работу акторов."""
+        return self
+
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        """Контекстный менеджер ждет CancelledError и завершает работу акторов."""
         try:
-            await asyncio.Event().wait()
+            await asyncio.shield(self._actor)
         except asyncio.CancelledError:
             _Logger.info("shutdown signal received...")
             await self.shutdown()

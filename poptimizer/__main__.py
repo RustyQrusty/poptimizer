@@ -7,25 +7,26 @@ from poptimizer.app import actor, backup, clients, config, lgr, telegram
 
 
 async def main() -> None:
-    """Запускает асинхронное приложение, которое может быть остановлено SIGINT."""
+    """Запускает асинхронное приложение, которое может быть остановлено SIGINT.
+
+    Настройки передаются через .env файл.
+    """
     cfg = config.Cfg()
 
     async with (  # noqa:  WPS316
         clients.http(cfg.http_client.con_per_host) as http,
         clients.mongo(cfg.mongo.uri) as mongo,
-    ):
-        app = actor.App(
+        actor.App(
             telegram.Telegram(
                 http,
                 cfg.logger.telegram_level,
                 cfg.logger.telegram_token,
                 cfg.logger.telegram_chat_id,
             ),
-        )
+        ) as app,
+    ):
         lgr.config(app, cfg.logger.level)
         app.spawn(backup.Backup(mongo))
-
-        await app.join()
 
 
 if __name__ == "__main__":
