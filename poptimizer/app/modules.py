@@ -2,12 +2,13 @@
 import aiohttp
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from poptimizer.adapters.portfolio import Adapter
+from poptimizer.adapters import market_data, portfolio
 from poptimizer.app import config, lgr, telegram
 from poptimizer.core import actor, repository
-from poptimizer.data import updater
+from poptimizer.data.actor import MarketData
 from poptimizer.data.update import cpi, divs, indexes, quotes, securities, trading_date, usd
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry, status
+from poptimizer.portfolio.actor import Portfolio
 
 
 def create_root_actor(http: aiohttp.ClientSession, cfg: config.Logger) -> actor.Root:
@@ -25,13 +26,12 @@ def create_root_actor(http: aiohttp.ClientSession, cfg: config.Logger) -> actor.
     return root
 
 
-def create_updater(http: aiohttp.ClientSession, mongo: AsyncIOMotorClient) -> updater.Updater:
-    """Создает сервис обновления данных."""
+def create_data_updater(http: aiohttp.ClientSession, mongo: AsyncIOMotorClient, refs: list[actor.Ref]) -> MarketData:
+    """Создает актора обновления рыночных данных."""
     repo = repository.Repo(mongo)
+    portfolio_data = portfolio.Adapter(repo)
 
-    portfolio_data = Adapter(repo)
-
-    return updater.Updater(
+    return MarketData(
         trading_date.Service(repo, http),
         cpi.Service(repo, http),
         indexes.Service(repo, http),
@@ -43,5 +43,13 @@ def create_updater(http: aiohttp.ClientSession, mongo: AsyncIOMotorClient) -> up
         reestry.Service(repo, http),
         nasdaq.Service(repo, http),
         check_raw.Service(repo),
-        [],
+        refs,
     )
+
+
+def create_portfolio_updater(mongo: AsyncIOMotorClient) -> Portfolio:
+    """Создает актора обновления стоимости портфеля."""
+    repo = repository.Repo(mongo)
+    data_adapter = market_data.Adapter(repo)
+
+    return Portfolio(repo, data_adapter)

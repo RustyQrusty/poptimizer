@@ -23,8 +23,8 @@ _BACK_OFF_FACTOR: Final = 2
 _DATE_FORMAT: Final = "%Y-%m-%d"
 
 
-class Updater:
-    """Актор обновления данных."""
+class MarketData:
+    """Актор обновления рыночных данных."""
 
     def __init__(  # noqa: WPS211
         self,
@@ -41,7 +41,7 @@ class Updater:
         check_raw_srv: check_raw.Service,
         subscribers: list[Ref],
     ) -> None:
-        self._logger = logging.getLogger("Data")
+        self._logger = logging.getLogger("MarketData")
         self._check_interval = _CHECK_INTERVAL
         self._worker: asyncio.Task[None] | None = None
         self._stop_event = asyncio.Event()

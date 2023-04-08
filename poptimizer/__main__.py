@@ -19,7 +19,8 @@ async def main() -> None:
         modules.create_root_actor(http, cfg.logger) as app,
     ):
         app.spawn(backup.Backup(mongo))
-        app.spawn(modules.create_updater(http, mongo))
+        port_ref = app.spawn(modules.create_portfolio_updater(mongo))
+        app.spawn(modules.create_data_updater(http, mongo, [port_ref]))
 
 
 if __name__ == "__main__":

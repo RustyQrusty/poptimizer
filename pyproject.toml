@@ -143,7 +143,7 @@ layers = [
     "poptimizer.core",
 ]
 ignore_imports = [
-    "poptimizer.adapters.portfolio -> poptimizer.portfolio.updater",
+    "poptimizer.adapters.portfolio -> poptimizer.portfolio.actor",
 ]
 
 [[tool.importlinter.contracts]]

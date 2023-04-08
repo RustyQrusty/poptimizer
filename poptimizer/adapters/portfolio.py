@@ -1,6 +1,6 @@
 """Адаптер для просмотра данных о портфеле другими модулями."""
 from poptimizer.core import domain, repository
-from poptimizer.portfolio import updater
+from poptimizer.portfolio import actor
 
 
 class Adapter:
@@ -11,6 +11,6 @@ class Adapter:
 
     async def tickers(self) -> tuple[str, ...]:
         """Упорядоченный перечень тикеров в портфеле."""
-        port = await self._repo.get_doc(domain.Group.PORTFOLIO, updater.CURRENT_ID)
+        port = await self._repo.get_doc(domain.Group.PORTFOLIO, actor.CURRENT_ID)
 
         return tuple(pos["ticker"] for pos in port.get("positions", []))
