@@ -1,9 +1,9 @@
-"""Сервис обновления данных."""
+"""Актор обновления данных."""
 import asyncio
 import logging
 import zoneinfo
 from datetime import datetime, timedelta
-from typing import Final, Protocol
+from typing import Final
 
 from poptimizer.core.actor import Ctx, Ref, SystemMsg
 from poptimizer.core.exceptions import DataUpdateError
@@ -23,15 +23,8 @@ _BACK_OFF_FACTOR: Final = 2
 _DATE_FORMAT: Final = "%Y-%m-%d"
 
 
-class UpdateStep(Protocol):
-    """Служба, отвечающая за обновление."""
-
-    async def update(self, update_day: datetime) -> None:
-        """Запуск обновления."""
-
-
 class Updater:
-    """Сервис обновления данных."""
+    """Актор обновления данных."""
 
     def __init__(  # noqa: WPS211
         self,
@@ -46,9 +39,9 @@ class Updater:
         reestry_srv: reestry.Service,
         nasdaq_srv: nasdaq.Service,
         check_raw_srv: check_raw.Service,
-        listeners: list[Ref],
+        subscribers: list[Ref],
     ) -> None:
-        self._logger = logging.getLogger(self.__class__.__name__)
+        self._logger = logging.getLogger("Data")
         self._check_interval = _CHECK_INTERVAL
         self._worker: asyncio.Task[None] | None = None
         self._stop_event = asyncio.Event()
@@ -69,10 +62,13 @@ class Updater:
         self._nasdaq_srv = nasdaq_srv
         self._check_raw_srv = check_raw_srv
 
-        self._listeners = listeners
+        self._subscribers = subscribers
 
     async def __call__(self, ctx: Ctx, msg: SystemMsg) -> None:
-        """Обрабатывает сообщение."""
+        """Создает и останавливает периодическую задачу обновления данных.
+
+        Рассылает сообщения об окончании обновления всем подписчикам.
+        """
         match msg:
             case SystemMsg.STARTING:
                 if self._worker is not None:
@@ -91,9 +87,8 @@ class Updater:
                 await self._worker
 
     async def _run(self, ctx: Ctx) -> None:
-        """Запускает регулярное обновление данных."""
         self._checked_day = await self._date_srv.get_date_from_local_store()
-        self._logger.info(f"last update for {self._checked_day:{_DATE_FORMAT}}")
+        self._logger.info(f"last update on {self._checked_day:{_DATE_FORMAT}}")
 
         while not self._stop_event.is_set():
             try:
@@ -111,7 +106,7 @@ class Updater:
                 return_when=asyncio.FIRST_COMPLETED,
             )
 
-        self._logger.info(f"last update for {self._checked_day:{_DATE_FORMAT}}")
+        self._logger.info(f"last update on {self._checked_day:{_DATE_FORMAT}}")
 
     async def _try_to_update(self, ctx: Ctx) -> None:
         last_day = _last_day()
@@ -119,7 +114,7 @@ class Updater:
         if self._checked_day >= last_day:
             return
 
-        self._logger.info(f"checking new trading data for {last_day:{_DATE_FORMAT}}")
+        self._logger.info(f"checking new trading data on {last_day:{_DATE_FORMAT}}")
 
         new_update_day = await self._date_srv.get_date_from_iss()
 
@@ -133,7 +128,7 @@ class Updater:
         await self._update(new_update_day)
         await self._date_srv.save(new_update_day)
 
-        for ref in self._listeners:
+        for ref in self._subscribers:
             ctx.send(new_update_day, ref)
 
         self._checked_day = last_day
