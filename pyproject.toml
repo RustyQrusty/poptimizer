@@ -43,6 +43,7 @@ dev = [
     "black[d]>=22.10.0",
     "import-linter>=1.4.0",
     "wemake-python-styleguide>=0.17.0",
+    "flake8-pyproject>=0.9.1",
 ]
 
 [tool.mypy]
@@ -77,6 +78,55 @@ omit = ["*/tests/*"]
 
 [tool.black]
 line-length = 120
+
+[tool.flake8]
+# format = wemake
+i-control-code = true
+show-violation-links = true
+ignore = [
+    "E203",  # Whitespace before ‘:’ - black formatter style
+    "D107",  # Missing docstring in __init__ - usually duplicate class docstring
+    "N805",  # First argument of a method should be named 'self' - false positive for pydantic validators
+    "W503",  # Line break before binary operator - black formatter style
+    "WPS115",  # Found upper-case constant in a class - false positive for python Enum style
+    "WPS305",  # Found `f` string - prefer use modern features
+    "WPS306",  # Found class without a base class - python 2.x deprecated
+    "WPS323",  # Found `%` string formatting - false positive for date formatting
+    "WPS332",  # Found walrus operator - prefer use modern features
+    "WPS348",  # Found a line that starts with a dot - black formatter style
+    "WPS473",  # Found too many empty lines in `def` - black formatter style
+    "WPS601",  # Found shadowed class attribute - false positive for pydantic attributes
+]
+
+
+nested-classes-whitelist = "Config"
+max-line-length = 120
+inline-quotes = "double"
+per-file-ignores = ["*/tests/*.py:D100,D101,D102,D103,D104,S101,WPS202,WPS214,WPS226,WPS432,WPS437,WPS609"]
+# D100 Missing docstring in public module
+# D101 Missing docstring in public class
+# D102 Missing docstring in public method
+# D103 Missing docstring in public function
+# D104 Missing docstring in public package
+# S101  Use of assert detected
+# WPS202 Found too many module members
+# WPS214 Found too many methods
+# WPS226 Found string constant over-use
+# WPS432 Found magic number
+# WPS437 Found protected attribute usage
+# WPS609 Found direct magic attribute usage
+
+# darglint
+docstring_style = "sphinx"
+strictness = "long"
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 120
 
 [tool.importlinter]
 root_package = "poptimizer"

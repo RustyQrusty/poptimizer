@@ -35,7 +35,7 @@ tasks:
       - pdm run isort {{.APP}}
       - pdm run lint-imports
       - pdm run mypy {{.APP}}
-      - pdm run flake8 {{.APP}}
+      - pdm run flake8p {{.APP}}
 
   test:
     desc: Lint and test with pytest.

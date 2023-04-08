@@ -275,6 +275,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "flake8-pyproject"
+version = "0.9.1"
+requires_python = ">=3.6"
+summary = "Runs Flake8 with configuration from pyproject.toml."
+dependencies = [
+    "Flake8<5",
+    "TOMLi",
+]
+
+[[package]]
 name = "flake8-quotes"
 version = "3.3.2"
 summary = "Flake8 lint for quotes."
@@ -349,16 +359,6 @@ dependencies = [
     "click>=6",
     "grimp>=2.3",
     "typing-extensions>=3.10.0.0",
-]
-
-[[package]]
-name = "import-linter"
-version = "1.8.0"
-extras = ["toml"]
-requires_python = ">=3.7"
-summary = "Enforces rules for the imports within and between Python packages."
-dependencies = [
-    "import-linter==1.8.0",
 ]
 
 [[package]]
@@ -673,6 +673,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "tomli"
+version = "2.0.1"
+requires_python = ">=3.7"
+summary = "A lil' TOML parser"
+
+[[package]]
 name = "torch"
 version = "2.0.0"
 requires_python = ">=3.8.0"
@@ -750,7 +756,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:d24c4abfd9f622ad1929dd1032c361051198896ebb554a124f1c3fa6f37509a4"
+content_hash = "sha256:96b56674d46ffa9a12d43815e5ef4119ad475bf0b1a0650e9a7013371bf8a600"
 
 [metadata.files]
 "aiofiles 23.1.0" = [
@@ -1102,6 +1108,9 @@ content_hash = "sha256:d24c4abfd9f622ad1929dd1032c361051198896ebb554a124f1c3fa6f
 "flake8-polyfill 1.0.2" = [
     {url = "https://files.pythonhosted.org/packages/86/b5/a43fed6fd0193585d17d6faa7b85317d4461f694aaed546098c69f856579/flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
     {url = "https://files.pythonhosted.org/packages/e6/67/1c26634a770db5c442e361311bee73cb3a177adb2eb3f7af8953cfd9f553/flake8-polyfill-1.0.2.tar.gz", hash = "sha256:e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"},
+]
+"flake8-pyproject 0.9.1" = [
+    {url = "https://files.pythonhosted.org/packages/8c/c8/cdbc40157c7631acc8d070bce09e6e4ecda3f07accf4c5895be9a95c66f5/flake8_pyproject-0.9.1-py3-none-any.whl", hash = "sha256:e4b6973021ab78aeb2a0ec993a0f990f26e01746728b102db3b212d1e509b43e"},
 ]
 "flake8-quotes 3.3.2" = [
     {url = "https://files.pythonhosted.org/packages/88/89/7c5a8e671c17ae49e4b89b06d9d2db5608eea7c66b04d70d27390da9ddb9/flake8-quotes-3.3.2.tar.gz", hash = "sha256:6e26892b632dacba517bf27219c459a8396dcfac0f5e8204904c5a4ba9b480e1"},
@@ -1807,6 +1816,10 @@ content_hash = "sha256:d24c4abfd9f622ad1929dd1032c361051198896ebb554a124f1c3fa6f
 "sympy 1.11.1" = [
     {url = "https://files.pythonhosted.org/packages/2d/49/a2d03101e2d28ad528968144831d506344418ef1cc04839acdbe185889c2/sympy-1.11.1-py3-none-any.whl", hash = "sha256:938f984ee2b1e8eae8a07b884c8b7a1146010040fccddc6539c54f401c8f6fcf"},
     {url = "https://files.pythonhosted.org/packages/5a/36/4667b08bc45131fe655a27b1a112c1730f3244343c53a338f44d730bd6ba/sympy-1.11.1.tar.gz", hash = "sha256:e32380dce63cb7c0108ed525570092fd45168bdae2faa17e528221ef72e88658"},
+]
+"tomli 2.0.1" = [
+    {url = "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
+    {url = "https://files.pythonhosted.org/packages/c0/3f/d7af728f075fb08564c5949a9c95e44352e23dee646869fa104a3b2060a3/tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 "torch 2.0.0" = [
     {url = "https://files.pythonhosted.org/packages/21/7a/f43f2f490836dfc2de466dbc86cd75357d9ae3945c084efa290fad15976f/torch-2.0.0-1-cp311-cp311-manylinux2014_aarch64.whl", hash = "sha256:bd42db2a48a20574d2c33489e120e9f32789c4dc13c514b0c44272972d14a2d7"},
