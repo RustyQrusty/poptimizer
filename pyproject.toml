@@ -136,16 +136,14 @@ name = "Layered"
 type = "layers"
 layers = [
     "poptimizer.app",
-    "poptimizer.utils",
     "poptimizer.server",
     "poptimizer.portfolio",
     "poptimizer.data",
+    "poptimizer.adapters",
     "poptimizer.core",
 ]
 ignore_imports = [
-    "poptimizer.data.update.raw.status -> poptimizer.portfolio.adapter",
-    "poptimizer.server.logger -> poptimizer.utils.lgr",
-    "poptimizer.data.update.quotes -> poptimizer.utils.retry",
+    "poptimizer.adapters.portfolio -> poptimizer.portfolio.update.portfolio",
 ]
 
 [[tool.importlinter.contracts]]
@@ -157,8 +155,5 @@ modules = [
     "poptimizer.data",
 ]
 ignore_imports = [
-    "poptimizer.data.*.*.* -> poptimizer.*.adapter",
-    "poptimizer.portfolio.*.* -> poptimizer.*.adapter",
-    "poptimizer.server.* -> poptimizer.*.edit.*",
-    "poptimizer.server.middleware -> poptimizer.*.exceptions",
+    "poptimizer.data.update.raw.status -> poptimizer.adapters.*",
 ]
