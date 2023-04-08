@@ -16,9 +16,10 @@ async def main() -> None:
     async with (  # noqa:  WPS316
         clients.http(cfg.http_client.con_per_host) as http,
         clients.mongo(cfg.mongo.uri) as mongo,
-        modules.root_actor(http, cfg.logger) as app,
+        modules.create_root_actor(http, cfg.logger) as app,
     ):
         app.spawn(backup.Backup(mongo))
+        app.spawn(modules.create_updater(http, mongo))
 
 
 if __name__ == "__main__":
