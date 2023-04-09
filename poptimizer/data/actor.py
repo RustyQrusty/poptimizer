@@ -30,7 +30,6 @@ _BACK_OFF_FACTOR: Final = 2
 
 
 class MarketData:
-
     """Актор обновления рыночных данных."""
 
     def __init__(  # noqa: PLR0913

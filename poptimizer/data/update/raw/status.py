@@ -22,7 +22,6 @@ _RE_TICKER = re.compile(r", ([A-Z]+-[A-Z]+|[A-Z]+) \[")
 
 
 class Status(domain.Row):
-
     """Информация о новых дивидендах."""
 
     ticker: str
@@ -33,7 +32,6 @@ class Status(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица с информацией о новых дивидендах."""
 
     group: ClassVar[domain.Group] = domain.Group.STATUS
@@ -58,7 +56,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис загрузки статуса дивидендов."""
 
     def __init__(

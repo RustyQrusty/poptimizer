@@ -7,14 +7,12 @@ from poptimizer.portfolio import actor, entity
 
 
 class AccountsDTO(BaseModel):
-
     """Перечень существующих брокерских счетов."""
 
     __root__: list[str]
 
 
 class PositionDTO(BaseModel):
-
     """Позиция по тикеру на конкретном счете."""
 
     ticker: str
@@ -25,7 +23,6 @@ class PositionDTO(BaseModel):
 
 
 class AccountDTO(BaseModel):
-
     """Информация о составе отдельного брокерского счета с рыночными данными."""
 
     cash: int
@@ -33,7 +30,6 @@ class AccountDTO(BaseModel):
 
 
 class SharesDTO(BaseModel):
-
     """Информация об измененном количестве бумаг на брокерском счете."""
 
     ticker: str
@@ -41,7 +37,6 @@ class SharesDTO(BaseModel):
 
 
 class AccountUpdateDTO(BaseModel):
-
     """Информация о составе отдельного брокерского счета без рыночных данных."""
 
     cash: int
@@ -49,7 +44,6 @@ class AccountUpdateDTO(BaseModel):
 
 
 class Service:
-
     """Сервис редактирования перечня выбранных тикеров."""
 
     def __init__(self, repo: repository.Repo) -> None:

@@ -14,7 +14,6 @@ CURRENT_ID: Final = "Current"
 
 
 class Portfolio:
-
     """Актор обновления стоимости и оборачиваемости портфеля."""
 
     def __init__(self, repo: repository.Repo, data_adapter: market_data.Adapter) -> None:

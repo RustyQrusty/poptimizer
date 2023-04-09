@@ -38,4 +38,4 @@ async def error(
         return await handler(request)
     except (ValidationError, ClientError) as err:
         reason = str(err)
-        raise web.HTTPBadRequest(text=reason.splitlines()[0], reason=reason)
+        raise web.HTTPBadRequest(text=reason.splitlines()[0], reason=reason) from err

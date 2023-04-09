@@ -3,24 +3,22 @@ from __future__ import annotations
 
 import bisect
 import logging
+from datetime import datetime  # noqa: TCH003
 from enum import StrEnum, auto, unique
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
+from poptimizer.core import domain, repository  # noqa: TCH001
 from poptimizer.core.exceptions import ClientError
 from poptimizer.data.update import securities
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from datetime import datetime
-
-    from poptimizer.core import domain, repository
 
 
 class TickersDTO(BaseModel):
-
     """Сортированный перечень существующих тикеров."""
 
     __root__: list[str]
@@ -28,7 +26,6 @@ class TickersDTO(BaseModel):
 
 @unique
 class Status(StrEnum):
-
     """Возможные значения статуса."""
 
     EXTRA = auto()
@@ -37,7 +34,6 @@ class Status(StrEnum):
 
 
 class Dividend(BaseModel):
-
     """Отдельная запись о дивидендах со статусом сравнения."""
 
     date: datetime
@@ -47,7 +43,6 @@ class Dividend(BaseModel):
 
 
 class DividendsDTO(BaseModel):
-
     """Данные о дивидендах со статусом сравнения с внешними источниками."""
 
     __root__: list[Dividend]
@@ -88,14 +83,12 @@ class DividendsDTO(BaseModel):
 
 
 class SaveDividendsDTO(BaseModel):
-
     """Обновленные дивиденды для сохранения."""
 
     __root__: list[check_raw.Raw]
 
 
 class Service:
-
     """Сервис редактирования перечня выбранных тикеров."""
 
     def __init__(self, repo: repository.Repo, backup_func: Callable[[], None]) -> None:

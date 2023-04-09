@@ -21,14 +21,12 @@ _DIV_TRANSLATE: Final = str.maketrans({",": ".", " ": ""})
 
 
 class Table(check_raw.Table):
-
     """Таблица дивидендов сайта https://закрытияреестров.рф."""
 
     group: ClassVar[domain.Group] = domain.Group.REESTRY
 
 
 class Service:
-
     """Сервис обновления дивидендов с сайта https://закрытияреестров.рф."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

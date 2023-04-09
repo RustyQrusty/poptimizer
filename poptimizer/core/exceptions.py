@@ -13,7 +13,6 @@ _FuncReturn = TypeVar("_FuncReturn")
 
 
 class _ErrorWrapper:
-
     """Асинхронный декоратор для обертывания внешних ошибок."""
 
     def __init__(
@@ -46,7 +45,6 @@ class _ErrorWrapper:
 
 
 class _ErrorSuppressor:
-
     """Асинхронный декоратор для подавления и логирования ошибки."""
 
     def __init__(
@@ -79,7 +77,6 @@ class _ErrorSuppressor:
 
 
 class _Policy(BaseModel):
-
     """Политика осуществления повторов."""
 
     attempts: int = Field(ge=2)
@@ -89,7 +86,6 @@ class _Policy(BaseModel):
 
 
 class _ExponentialRetryer:
-
     """Асинхронный декоратор для экспоненциального повторного вызова асинхронных функций."""
 
     def __init__(
@@ -137,7 +133,6 @@ class _ExponentialRetryer:
 
 
 class POError(Exception):
-
     """Базовая ошибка приложения."""
 
     def __str__(self) -> str:
@@ -155,7 +150,6 @@ class POError(Exception):
 
 
 class DataUpdateError(POError):
-
     """Ошибка модуля обновления данных."""
 
     @classmethod
@@ -182,5 +176,4 @@ class DataUpdateError(POError):
 
 
 class ClientError(POError):
-
     """Ошибки обусловленные некорректными данными, переданными web-клиентом."""

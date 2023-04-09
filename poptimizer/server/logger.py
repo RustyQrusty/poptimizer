@@ -10,7 +10,6 @@ START_TIME: Final = "start_time"
 
 
 class AccessLogger(AbstractAccessLogger):
-
     """Логирует основные параметры обработки запроса."""
 
     def log(self, request: web.BaseRequest, response: web.StreamResponse, _: float) -> None:

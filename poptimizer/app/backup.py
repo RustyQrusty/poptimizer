@@ -10,11 +10,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from poptimizer.core import actor, consts, domain
 
-_BACKUP_COLLECTIONS: Final = (domain.Group.RAW_DIV,)
+BACKUP_COLLECTION: Final = domain.Group.RAW_DIV
 
 
 class Backup:
-
     """Актор, который восстанавливает и сохраняет бекап данных."""
 
     _dump: ClassVar = consts.ROOT_PATH / "dump"
@@ -27,7 +26,7 @@ class Backup:
         """Обрабатывает сообщение."""
         match msg:
             case actor.SystemMsg.STARTING:
-                await self.restore(_BACKUP_COLLECTIONS)
+                await self.restore((BACKUP_COLLECTION,))
             case domain.Group():
                 await self.backup((msg,))
 

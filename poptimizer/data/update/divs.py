@@ -15,7 +15,6 @@ from poptimizer.data.update.raw import check_raw
 
 
 class Dividend(domain.Row):
-
     """Выплата дивидендов в рублях."""
 
     date: datetime
@@ -23,7 +22,6 @@ class Dividend(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица дивидендов в рублях."""
 
     group: ClassVar[domain.Group] = domain.Group.DIVIDENDS
@@ -39,7 +37,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис обновления данных о дивидендах в рублях на основе сырых дивидендов.
 
     Для пересчета долларовых дивидендов используется курс на момент закрытия реестра.

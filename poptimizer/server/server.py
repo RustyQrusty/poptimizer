@@ -5,21 +5,20 @@ from aiohttp import web
 
 from poptimizer.core.actor import Ctx, SystemMsg
 from poptimizer.data.edit import dividends
-from poptimizer.portfolio.edit import accounts, portfolio, selected
+from poptimizer.portfolio.edit import accounts, port_srv, selected
 from poptimizer.server import logger, middleware, views
 
 
 class Server:
-
     """Актор, показывающий SPA Frontend и отвечающий на Backend запросы."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         host: str,
         port: int,
         selected_srv: selected.Service,
         accounts_srv: accounts.Service,
-        portfolio_srv: portfolio.Service,
+        portfolio_srv: port_srv.Service,
         dividends_srv: dividends.Service,
     ) -> None:
         self._logger = logging.getLogger("Server")

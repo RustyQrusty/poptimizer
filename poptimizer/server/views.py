@@ -5,11 +5,10 @@ from aiohttp import web
 
 from poptimizer.core import consts
 from poptimizer.data.edit import dividends
-from poptimizer.portfolio.edit import accounts, portfolio, selected
+from poptimizer.portfolio.edit import accounts, port_srv, selected
 
 
 class Selected(web.View):
-
     """Ручки для редактирования выбранных тикеров."""
 
     _srv: ClassVar[selected.Service]
@@ -35,7 +34,6 @@ class Selected(web.View):
 
 
 class Accounts(web.View):
-
     """Ручки для редактирования состава брокерских счетов."""
 
     _srv: ClassVar[accounts.Service]
@@ -88,13 +86,12 @@ class Accounts(web.View):
 
 
 class Portfolio(web.View):
-
     """Ручки для просмотра состава портфеля."""
 
-    _srv: ClassVar[portfolio.Service]
+    _srv: ClassVar[port_srv.Service]
 
     @classmethod
-    def register(cls, app: web.Application, srv: portfolio.Service) -> None:
+    def register(cls, app: web.Application, srv: port_srv.Service) -> None:
         """Регистрирует ручки для редактирования состава брокерских счетов и внедряет необходимую службу."""
         cls._srv = srv
 
@@ -118,7 +115,6 @@ class Portfolio(web.View):
 
 
 class Dividends(web.View):
-
     """Ручки для сверки и редактирования дивидендов."""
 
     _srv: ClassVar[dividends.Service]
@@ -155,7 +151,6 @@ class Dividends(web.View):
 
 
 class Frontend(web.View):
-
     """Отображение главной страницы."""
 
     _static: ClassVar = consts.ROOT_PATH / "static"

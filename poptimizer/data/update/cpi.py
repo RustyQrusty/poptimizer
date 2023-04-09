@@ -36,7 +36,6 @@ _MINIMUM_MONTHLY_CPI: Final = 0.99
 
 
 class CPI(domain.Row):
-
     """Значение мультипликативной инфляции для заданного месяца (его последней даты)."""
 
     date: datetime
@@ -51,7 +50,6 @@ class CPI(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица с инфляцией."""
 
     group: ClassVar[domain.Group] = domain.Group.CPI
@@ -70,7 +68,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис обновления потребительской инфляции."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

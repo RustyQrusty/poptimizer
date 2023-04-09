@@ -18,9 +18,10 @@ async def main() -> None:
         clients.mongo(cfg.mongo.uri) as mongo,
         modules.create_root_actor(http, cfg.logger) as app,
     ):
-        app.spawn(backup.Backup(mongo))
+        backup_ref = app.spawn(backup.Backup(mongo))
         port_ref = app.spawn(modules.create_portfolio_updater(mongo))
         app.spawn(modules.create_data_updater(http, mongo, [port_ref]))
+        app.spawn(modules.create_server(cfg.server, mongo, lambda: app.send(backup.BACKUP_COLLECTION, backup_ref)))
 
 
 if __name__ == "__main__":

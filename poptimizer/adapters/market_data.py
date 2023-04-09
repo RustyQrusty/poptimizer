@@ -11,7 +11,6 @@ from poptimizer.core import domain, repository
 
 @unique
 class Columns(StrEnum):
-
     """Существующие столбцы данных."""
 
     TICKER = "TICKER"
@@ -29,7 +28,6 @@ class Columns(StrEnum):
 
 
 class Adapter:
-
     """Позволяет внешним модулям просматривать рыночную информацию в удобном виде."""
 
     def __init__(self, repo: repository.Repo) -> None:

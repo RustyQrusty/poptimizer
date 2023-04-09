@@ -31,7 +31,6 @@ class _Payload(BaseModel):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица с информацией о последней торговой дате."""
 
     group: ClassVar[domain.Group] = domain.Group.TRADING_DATE
@@ -40,7 +39,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис обновления таблицы с данными о торговых днях."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

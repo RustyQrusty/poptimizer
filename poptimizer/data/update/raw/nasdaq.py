@@ -46,21 +46,18 @@ class _Dividends(BaseModel):
 
 
 class _NASDAQ(BaseModel):
-
     """Представляет структуру json-ответа https://www.nasdaq.com."""
 
     api_data: _Dividends = Field(alias="data")
 
 
 class Table(check_raw.Table):
-
     """Таблица дивидендов сайта https://www.nasdaq.com."""
 
     group: ClassVar[domain.Group] = domain.Group.NASDAQ
 
 
 class Service:
-
     """Сервис обновления дивидендов с сайта https://www.nasdaq.com."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

@@ -14,7 +14,6 @@ from poptimizer.data.update import securities, validate
 
 
 class Quote(domain.Row):
-
     """Котировка ценной бумаги."""
 
     date: datetime = Field(alias="begin")
@@ -26,7 +25,6 @@ class Quote(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица с котировками ценных бумаг."""
 
     group: ClassVar[domain.Group] = domain.Group.QUOTES
@@ -61,7 +59,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис обновления котировок ценных бумаг."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

@@ -16,7 +16,6 @@ _INDEXES: Final = ("MCFTRR", "MEOGTRR", "IMOEX", "RVI")
 
 
 class Index(domain.Row):
-
     """Котировки индекса."""
 
     date: datetime = Field(alias="TRADEDATE")
@@ -24,7 +23,6 @@ class Index(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица с котировками индекса."""
 
     group: ClassVar[domain.Group] = domain.Group.INDEXES
@@ -57,7 +55,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис обновления котировок биржевых индексов."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

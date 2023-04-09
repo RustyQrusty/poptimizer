@@ -13,7 +13,6 @@ from poptimizer.data.update.raw import status
 
 
 class Raw(domain.Row):
-
     """Информация о дивидендах с указанием валюты."""
 
     date: datetime
@@ -30,7 +29,6 @@ class Raw(domain.Row):
 
 
 class Table(domain.BaseEntity):
-
     """Таблица дивидендов с указанием валюты введенная в ручную."""
 
     group: ClassVar[domain.Group] = domain.Group.RAW_DIV
@@ -74,7 +72,6 @@ class Table(domain.BaseEntity):
 
 
 class Service:
-
     """Сервис проверки наличия данных по ожидаемым дивидендам."""
 
     def __init__(self, repo: repository.Repo) -> None:

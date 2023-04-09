@@ -1,4 +1,6 @@
 """Сборка отдельных компонент."""
+from collections.abc import Callable
+
 import aiohttp
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -6,6 +8,7 @@ from poptimizer.adapters import market_data, portfolio
 from poptimizer.app import config, lgr, telegram
 from poptimizer.core import actor, repository
 from poptimizer.data.actor import MarketData
+from poptimizer.data.edit import dividends
 from poptimizer.data.update import (
     cpi,
     divs,
@@ -17,6 +20,8 @@ from poptimizer.data.update import (
 )
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry, status
 from poptimizer.portfolio.actor import Portfolio
+from poptimizer.portfolio.edit import accounts, port_srv, selected
+from poptimizer.server.server import Server
 
 
 def create_root_actor(http: aiohttp.ClientSession, cfg: config.Logger) -> actor.Root:
@@ -61,3 +66,21 @@ def create_portfolio_updater(mongo: AsyncIOMotorClient) -> Portfolio:
     data_adapter = market_data.Adapter(repo)
 
     return Portfolio(repo, data_adapter)
+
+
+def create_server(
+    cfg: config.Server,
+    mongo: AsyncIOMotorClient,
+    backup_func: Callable[[], None],
+) -> Server:
+    """Создает сервер, показывающий SPA Frontend."""
+    repo = repository.Repo(mongo)
+
+    return Server(
+        cfg.host,
+        cfg.port,
+        selected.Service(repo, market_data.Adapter(repo)),
+        accounts.Service(repo),
+        port_srv.Service(repo),
+        dividends.Service(repo, backup_func),
+    )

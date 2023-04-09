@@ -23,7 +23,6 @@ _level_num: Final = types.MappingProxyType(
 
 
 class Telegram:
-
     """Актор для отправки сообщений логера в Телеграм."""
 
     def __init__(self, client: aiohttp.ClientSession, level: int | str, token: str, chat_id: str) -> None:

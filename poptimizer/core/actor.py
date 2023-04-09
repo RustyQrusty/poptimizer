@@ -19,7 +19,6 @@ _Logger: Final = logging.getLogger("POptimizer")
 
 
 class Ref:
-
     """Ref ссылка на актора."""
 
     def __init__(self, actor: Actor) -> None:
@@ -32,7 +31,6 @@ class Ref:
 
 @runtime_checkable
 class Ctx(Protocol):
-
     """Контекст обработки сообщения актором."""
 
     def spawn(self, actor: Actor) -> Ref:
@@ -43,7 +41,6 @@ class Ctx(Protocol):
 
 
 class SystemMsg(StrEnum):
-
     """Системные сообщения.
 
     Актор может реагировать на них, чтобы инициализировать или высвободить ресурсы.
@@ -54,7 +51,6 @@ class SystemMsg(StrEnum):
 
 
 class Actor(Protocol):
-
     """Актор - умеет асинхронно обрабатывать сообщения."""
 
     async def __call__(self, ctx: Ctx, msg: Any) -> None:
@@ -62,7 +58,6 @@ class Actor(Protocol):
 
 
 class _Context:
-
     """Управляет жизненным циклом актора."""
 
     def __init__(
@@ -142,7 +137,6 @@ class _Dispatcher:
 
 
 class Root(_Context):
-
     """Приложение для запуска акторов."""
 
     def __init__(self, root: Actor) -> None:

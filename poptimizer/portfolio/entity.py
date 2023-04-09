@@ -10,7 +10,6 @@ from poptimizer.core.exceptions import ClientError
 
 
 class Position(BaseModel):
-
     """Позиция в портфеле."""
 
     ticker: str
@@ -34,7 +33,6 @@ class Position(BaseModel):
 
 
 class Portfolio(domain.BaseEntity):
-
     """Портфель."""
 
     group: ClassVar[domain.Group] = domain.Group.PORTFOLIO
