@@ -23,7 +23,7 @@ class Backup:
         self._logger = logging.getLogger("Backup")
         self._mongo = mongo_client
 
-    async def __call__(self, ctx: actor.Ctx, msg: actor.SystemMsg | domain.Group) -> None:
+    async def __call__(self, ctx: actor.Ctx, msg: actor.SystemMsg | domain.Group) -> None:  # noqa: ARG002
         """Обрабатывает сообщение."""
         match msg:
             case actor.SystemMsg.STARTING:

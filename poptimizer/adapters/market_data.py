@@ -63,7 +63,7 @@ class Adapter:
         )
         turnover.columns = tickers
 
-        return turnover.fillna(0).loc[:last_date]
+        return turnover.fillna(0).loc[:last_date]  # type: ignore[misc]
 
     async def price(
         self,
@@ -79,7 +79,7 @@ class Adapter:
         )
         price.columns = tickers
 
-        return price.fillna(method="ffill").loc[:last_date]
+        return price.fillna(method="ffill").loc[:last_date]  # type: ignore[misc]
 
     async def dividends(self, ticker: str) -> AsyncIterator[tuple[datetime, float]]:
         """Дивиденды для заданного тикера."""

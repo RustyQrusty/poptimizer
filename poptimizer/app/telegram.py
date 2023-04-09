@@ -40,7 +40,7 @@ class Telegram:
         self._chat_id = chat_id
         self._fmt = "<strong>{name}</strong>\n{message}"
 
-    async def __call__(self, ctx: actor.Ctx, msg: logging.LogRecord) -> None:
+    async def __call__(self, ctx: actor.Ctx, msg: logging.LogRecord) -> None:  # noqa: ARG002
         """Посылает сообщения в телеграм с уровнем логирования начиная с заданного.
 
         Игнорирует сообщения от логера Telegram, чтобы избежать рекурсии на ошибках с отправкой.

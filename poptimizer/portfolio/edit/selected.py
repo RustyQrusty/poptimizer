@@ -1,10 +1,10 @@
 """Сервис редактирования выбранных тикеров."""
 from pydantic import BaseModel
 
-from poptimizer.adapters import data
+from poptimizer.adapters import market_data
 from poptimizer.core import repository
 from poptimizer.core.exceptions import ClientError
-from poptimizer.portfolio import entity, updater
+from poptimizer.portfolio import actor, entity
 
 
 class Ticker(BaseModel):
@@ -26,7 +26,7 @@ class Service:
 
     """Сервис редактирования перечня выбранных тикеров."""
 
-    def __init__(self, repo: repository.Repo, data_adapter: data.Adapter) -> None:
+    def __init__(self, repo: repository.Repo, data_adapter: market_data.Adapter) -> None:
         self._repo = repo
         self._data_adapter = data_adapter
 
@@ -56,7 +56,7 @@ class Service:
         await self._repo.save(port)
 
     async def _prepare_dto(self) -> tuple[DTO, entity.Portfolio]:
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
         sec = {ticker: False for ticker in (await self._data_adapter.securities()).index}
         selected = {row.ticker: True for row in port.positions}
 

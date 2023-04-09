@@ -22,7 +22,7 @@ class Portfolio:
         self._repo = repo
         self._data_adapter = data_adapter
 
-    async def __call__(self, ctx: Ctx, msg: datetime) -> None:
+    async def __call__(self, ctx: Ctx, msg: datetime) -> None:  # noqa: ARG002
         """Обновляет стоимость и оборачиваемости портфеля."""
         await self._update(msg)
 

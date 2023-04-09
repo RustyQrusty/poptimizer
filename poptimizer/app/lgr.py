@@ -7,7 +7,6 @@ from typing import Final, Literal, TextIO
 
 from poptimizer.core import actor
 
-COLOR_MSG: Final = "color_msg"
 _LOGGER_NAME_SIZE: Final = 11
 _MAX_TELEGRAM_MSG_SIZE: Final = 4096
 
@@ -54,7 +53,7 @@ class _ColorFormatter(logging.Formatter):
 
         record.name = f"{record.name}:".ljust(_LOGGER_NAME_SIZE)
 
-        if color_msg := getattr(record, COLOR_MSG, None):
+        if color_msg := getattr(record, "color_msg", None):
             record.msg = color_msg
             record.message = record.getMessage()
 

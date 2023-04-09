@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from poptimizer.core import repository
 from poptimizer.core.exceptions import ClientError
-from poptimizer.portfolio import entity, updater
+from poptimizer.portfolio import actor, entity
 
 
 class AccountsDTO(BaseModel):
@@ -57,13 +57,13 @@ class Service:
 
     async def get_account_names(self) -> AccountsDTO:
         """Возвращает перечень существующих брокерских счетов."""
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
 
         return AccountsDTO(__root__=list(port.cash))
 
     async def create_account(self, acc_name: str) -> None:
         """Создает брокерский счет, если он не существует."""
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
 
         port.creat_account(acc_name)
 
@@ -71,7 +71,7 @@ class Service:
 
     async def remove_account(self, acc_name: str) -> None:
         """Удаляет брокерский счет, если он пустой."""
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
 
         port.remove_account(acc_name)
 
@@ -79,7 +79,7 @@ class Service:
 
     async def get_account(self, acc_name: str) -> AccountDTO:
         """Информация о составе брокерского счета."""
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
 
         if (cash := port.cash.pop(acc_name, None)) is None:
             raise ClientError(f"account {acc_name} don't exist")
@@ -102,7 +102,7 @@ class Service:
 
     async def update_account(self, acc_name: str, update: AccountUpdateDTO) -> None:
         """Обновляет данные о количестве бумаг на счете."""
-        port = await self._repo.get(entity.Portfolio, updater.CURRENT_ID)
+        port = await self._repo.get(entity.Portfolio, actor.CURRENT_ID)
         if acc_name not in port.cash:
             raise ClientError(f"account {acc_name} don't exist")
 

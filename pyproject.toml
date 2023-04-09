@@ -123,7 +123,6 @@ ignore_imports = [
 name = "Weakly coupled middle layer"
 type = "independence"
 modules = [
-    "poptimizer.server",
     "poptimizer.portfolio",
     "poptimizer.data",
 ]
