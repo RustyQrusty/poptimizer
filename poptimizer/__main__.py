@@ -13,7 +13,7 @@ async def main() -> None:
     """
     cfg = config.Cfg()
 
-    async with (  # noqa:  WPS316
+    async with (  # :  WPS316
         clients.http(cfg.http_client.con_per_host) as http,
         clients.mongo(cfg.mongo.uri) as mongo,
         modules.create_root_actor(http, cfg.logger) as app,

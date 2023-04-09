@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import ClassVar, Final
 
 import aiohttp
-from lxml import html  # noqa: S410
+from lxml import html
 
 from poptimizer.core import domain, repository
 from poptimizer.core.exceptions import DataUpdateError
@@ -21,12 +21,14 @@ _DIV_TRANSLATE: Final = str.maketrans({",": ".", " ": ""})
 
 
 class Table(check_raw.Table):
+
     """Таблица дивидендов сайта https://закрытияреестров.рф."""
 
     group: ClassVar[domain.Group] = domain.Group.REESTRY
 
 
 class Service:
+
     """Сервис обновления дивидендов с сайта https://закрытияреестров.рф."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:
@@ -50,7 +52,7 @@ class Service:
 
         html_page = await self._download(status_row)
         try:
-            row = _parse(html_page, status_row.preferred)
+            row = _parse(html_page, preferred=status_row.preferred)
         except DataUpdateError as err:
             raise DataUpdateError(f"can't parse {status_row.ticker}") from err
 
@@ -71,7 +73,7 @@ class Service:
             return await resp.text()
 
 
-def _parse(html_page: str, preferred: bool) -> list[check_raw.Raw]:
+def _parse(html_page: str, *, preferred: bool) -> list[check_raw.Raw]:
     doc = html.document_fromstring(html_page)
     rows_iter = iter(doc.xpath("//*/table/tbody/tr"))
     data_col = 1 + preferred

@@ -1,7 +1,8 @@
 """Различные клиенты для доступа к внешней инфраструктуре."""
 import types
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator, Final
+from typing import Final
 
 import aiohttp
 from motor.motor_asyncio import AsyncIOMotorClient

@@ -1,8 +1,9 @@
 """Базовая ошибка приложения."""
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 from functools import wraps
-from typing import Awaitable, Callable, ParamSpec, TypeVar
+from typing import ParamSpec, TypeVar
 
 import aiohttp
 from pydantic import BaseModel, Field
@@ -12,6 +13,7 @@ _FuncReturn = TypeVar("_FuncReturn")
 
 
 class _ErrorWrapper:
+
     """Асинхронный декоратор для обертывания внешних ошибок."""
 
     def __init__(
@@ -31,7 +33,7 @@ class _ErrorWrapper:
         """Декоратор обертывающий ошибку в другую с сообщением."""
 
         @wraps(func)
-        async def _wrap(  # noqa: WPS430
+        async def _wrap(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ) -> _FuncReturn:
@@ -44,6 +46,7 @@ class _ErrorWrapper:
 
 
 class _ErrorSuppressor:
+
     """Асинхронный декоратор для подавления и логирования ошибки."""
 
     def __init__(
@@ -61,14 +64,14 @@ class _ErrorSuppressor:
         """Декоратор логирует и игнорирует ошибку."""
 
         @wraps(func)
-        async def _wrap(  # noqa: WPS430
+        async def _wrap(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ) -> _FuncReturn | None:
             try:
                 return await func(*args, **kwargs)
             except self._errs as err:
-                self._logger.warning(f"can't complete update -> {err}")
+                self._logger.warning("can't complete update -> %s", err)
 
                 return None
 
@@ -76,6 +79,7 @@ class _ErrorSuppressor:
 
 
 class _Policy(BaseModel):
+
     """Политика осуществления повторов."""
 
     attempts: int = Field(ge=2)
@@ -85,6 +89,7 @@ class _Policy(BaseModel):
 
 
 class _ExponentialRetryer:
+
     """Асинхронный декоратор для экспоненциального повторного вызова асинхронных функций."""
 
     def __init__(
@@ -105,7 +110,7 @@ class _ExponentialRetryer:
         """Асинхронный декоратор, осуществляющий повторный вызов в случае исключений."""
 
         @wraps(func)
-        async def _wrap(  # noqa: WPS430
+        async def _wrap(
             *args: _FuncParams.args,
             **kwargs: _FuncParams.kwargs,
         ) -> _FuncReturn:
@@ -132,6 +137,7 @@ class _ExponentialRetryer:
 
 
 class POError(Exception):
+
     """Базовая ошибка приложения."""
 
     def __str__(self) -> str:
@@ -149,6 +155,7 @@ class POError(Exception):
 
 
 class DataUpdateError(POError):
+
     """Ошибка модуля обновления данных."""
 
     @classmethod
@@ -175,4 +182,5 @@ class DataUpdateError(POError):
 
 
 class ClientError(POError):
+
     """Ошибки обусловленные некорректными данными, переданными web-клиентом."""

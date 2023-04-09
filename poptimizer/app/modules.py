@@ -6,7 +6,15 @@ from poptimizer.adapters import market_data, portfolio
 from poptimizer.app import config, lgr, telegram
 from poptimizer.core import actor, repository
 from poptimizer.data.actor import MarketData
-from poptimizer.data.update import cpi, divs, indexes, quotes, securities, trading_date, usd
+from poptimizer.data.update import (
+    cpi,
+    divs,
+    indexes,
+    quotes,
+    securities,
+    trading_date,
+    usd,
+)
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry, status
 from poptimizer.portfolio.actor import Portfolio
 

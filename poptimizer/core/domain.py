@@ -13,6 +13,7 @@ _DL_DB: Final = "dl"
 
 @unique
 class Group(Enum):
+
     """Группы объектов.
 
     Объекты разбиты на отдельные модули (изолированные контексты), а в рамках модуля на группы.
@@ -51,6 +52,7 @@ class Group(Enum):
 
 @unique
 class Currency(StrEnum):
+
     """Валюты."""
 
     RUR = "RUR"
@@ -58,6 +60,7 @@ class Currency(StrEnum):
 
 
 class Row(BaseModel):
+
     """Строка с данными."""
 
     @validator("date", pre=True, check_fields=False)
@@ -69,6 +72,7 @@ class Row(BaseModel):
         return date
 
     class Config:
+
         """Загрузка объектов по псевдонимам и названиям полей."""
 
         allow_population_by_field_name = True
@@ -78,12 +82,14 @@ _RowT = TypeVar("_RowT")
 
 
 class Rows(GenericModel, Generic[_RowT]):
+
     """Строки с данными загруженные из внешних источников."""
 
     __root__: list[_RowT]
 
 
 class BaseEntity(BaseModel):
+
     """Базовый доменный объект."""
 
     group: ClassVar[Group]
@@ -91,6 +97,7 @@ class BaseEntity(BaseModel):
     timestamp: datetime = datetime.fromtimestamp(0)
 
     class Config:
+
         """Загрузка объектов по псевдонимам и названиям полей."""
 
         allow_population_by_field_name = True

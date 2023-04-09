@@ -7,7 +7,15 @@ from typing import Final
 
 from poptimizer.core.actor import Ctx, Ref, SystemMsg
 from poptimizer.core.exceptions import DataUpdateError
-from poptimizer.data.update import cpi, divs, indexes, quotes, securities, trading_date, usd
+from poptimizer.data.update import (
+    cpi,
+    divs,
+    indexes,
+    quotes,
+    securities,
+    trading_date,
+    usd,
+)
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry, status
 
 # Часовой пояс MOEX
@@ -20,13 +28,12 @@ _END_MINUTE: Final = 45
 _CHECK_INTERVAL: Final = timedelta(minutes=1)
 _BACK_OFF_FACTOR: Final = 2
 
-_DATE_FORMAT: Final = "%Y-%m-%d"
-
 
 class MarketData:
+
     """Актор обновления рыночных данных."""
 
-    def __init__(  # noqa: WPS211
+    def __init__(  # noqa: PLR0913
         self,
         date_srv: trading_date.Service,
         cpi_srv: cpi.Service,
@@ -88,14 +95,14 @@ class MarketData:
 
     async def _run(self, ctx: Ctx) -> None:
         self._checked_day = await self._date_srv.get_date_from_local_store()
-        self._logger.info(f"last update on {self._checked_day:{_DATE_FORMAT}}")
+        self._logger.info("last update on %s", self._checked_day.date())
 
         while not self._stop_event.is_set():
             try:
                 await self._try_to_update(ctx)
             except DataUpdateError as err:
                 self._check_interval *= _BACK_OFF_FACTOR
-                self._logger.warning(f"can't complete update {err} - waiting {self._check_interval}")
+                self._logger.warning("can't complete update %s - waiting %s", err, self._checked_day)
             else:
                 self._check_interval = _CHECK_INTERVAL
 
@@ -106,7 +113,7 @@ class MarketData:
                 return_when=asyncio.FIRST_COMPLETED,
             )
 
-        self._logger.info(f"last update on {self._checked_day:{_DATE_FORMAT}}")
+        self._logger.info("last update on %s", self._checked_day.date())
 
     async def _try_to_update(self, ctx: Ctx) -> None:
         last_day = _last_day()
@@ -114,7 +121,7 @@ class MarketData:
         if self._checked_day >= last_day:
             return
 
-        self._logger.info(f"checking new trading data on {last_day:{_DATE_FORMAT}}")
+        self._logger.info("checking new trading data on %s", last_day.date())
 
         new_update_day = await self._date_srv.get_date_from_iss()
 

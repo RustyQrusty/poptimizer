@@ -23,6 +23,7 @@ _level_num: Final = types.MappingProxyType(
 
 
 class Telegram:
+
     """Актор для отправки сообщений логера в Телеграм."""
 
     def __init__(self, client: aiohttp.ClientSession, level: int | str, token: str, chat_id: str) -> None:
@@ -61,4 +62,4 @@ class Telegram:
             async with self._client.post(self._api_url, json=json) as resp:
                 if not resp.ok:
                     err_desc = await resp.json()
-                    self._logger.warning(f"can't send {err_desc}")
+                    self._logger.warning("can't send %s", err_desc)

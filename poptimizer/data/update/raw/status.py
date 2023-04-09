@@ -4,8 +4,9 @@ import io
 import itertools
 import logging
 import re
+from collections.abc import Iterator
 from datetime import datetime, timedelta
-from typing import ClassVar, Final, Iterator
+from typing import ClassVar, Final
 
 import aiohttp
 from pydantic import Field, validator
@@ -21,6 +22,7 @@ _RE_TICKER = re.compile(r", ([A-Z]+-[A-Z]+|[A-Z]+) \[")
 
 
 class Status(domain.Row):
+
     """Информация о новых дивидендах."""
 
     ticker: str
@@ -31,6 +33,7 @@ class Status(domain.Row):
 
 
 class Table(domain.BaseEntity):
+
     """Таблица с информацией о новых дивидендах."""
 
     group: ClassVar[domain.Group] = domain.Group.STATUS
@@ -55,6 +58,7 @@ class Table(domain.BaseEntity):
 
 
 class Service:
+
     """Сервис загрузки статуса дивидендов."""
 
     def __init__(
@@ -125,7 +129,7 @@ class Service:
                 continue
 
             if (ticker_re := _RE_TICKER.search(ticker_raw)) is None:
-                self._logger.warning(f"can't parse ticker {ticker_raw}")
+                self._logger.warning("can't parse ticker %s", ticker_raw)
 
                 continue
 

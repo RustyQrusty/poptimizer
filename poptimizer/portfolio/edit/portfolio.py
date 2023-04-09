@@ -5,6 +5,7 @@ from poptimizer.portfolio.edit import accounts
 
 
 class Service:
+
     """Сервис просмотра состава портфеля."""
 
     def __init__(self, repo: repository.Repo) -> None:

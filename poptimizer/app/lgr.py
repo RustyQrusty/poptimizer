@@ -23,6 +23,7 @@ class _TelegramHandler(logging.StreamHandler[TextIO]):
 
 
 class _ColorFormatter(logging.Formatter):
+
     """Цветное логирование."""
 
     levels: Final = types.MappingProxyType(

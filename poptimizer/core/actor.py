@@ -8,15 +8,18 @@ import asyncio
 import logging
 import weakref
 from enum import StrEnum, auto
-from types import TracebackType
-from typing import Any, Final, Protocol, Self, runtime_checkable
+from typing import TYPE_CHECKING, Any, Final, Protocol, Self, runtime_checkable
 
 import pydantic
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 _Logger: Final = logging.getLogger("POptimizer")
 
 
 class Ref:
+
     """Ref ссылка на актора."""
 
     def __init__(self, actor: Actor) -> None:
@@ -29,6 +32,7 @@ class Ref:
 
 @runtime_checkable
 class Ctx(Protocol):
+
     """Контекст обработки сообщения актором."""
 
     def spawn(self, actor: Actor) -> Ref:
@@ -39,6 +43,7 @@ class Ctx(Protocol):
 
 
 class SystemMsg(StrEnum):
+
     """Системные сообщения.
 
     Актор может реагировать на них, чтобы инициализировать или высвободить ресурсы.
@@ -49,6 +54,7 @@ class SystemMsg(StrEnum):
 
 
 class Actor(Protocol):
+
     """Актор - умеет асинхронно обрабатывать сообщения."""
 
     async def __call__(self, ctx: Ctx, msg: Any) -> None:
@@ -56,6 +62,7 @@ class Actor(Protocol):
 
 
 class _Context:
+
     """Управляет жизненным циклом актора."""
 
     def __init__(
@@ -95,7 +102,7 @@ class _Context:
 
     async def _runner(self, actor: Actor, inbox: asyncio.Queue[Any]) -> None:
         validator = pydantic.validate_arguments(config={"arbitrary_types_allowed": True})
-        validated_actor = validator(actor.__call__)  # noqa: WPS609
+        validated_actor = validator(actor.__call__)
         inbox.put_nowait(SystemMsg.STARTING)
 
         stopping = False
@@ -111,7 +118,7 @@ class _Context:
             except ValueError as err:
                 if not isinstance(msg, SystemMsg):
                     _Logger.warning("%s can't process %s -> %s", self._ref, msg, err)
-            except Exception as err:
+            except Exception as err:  # noqa: BLE001
                 _Logger.warning("%s can't process %s -> %s", self._ref, msg, err)
 
             inbox.task_done()
@@ -135,6 +142,7 @@ class _Dispatcher:
 
 
 class Root(_Context):
+
     """Приложение для запуска акторов."""
 
     def __init__(self, root: Actor) -> None:

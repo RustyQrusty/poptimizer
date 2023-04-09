@@ -8,6 +8,7 @@ from poptimizer.portfolio import entity, updater
 
 
 class Ticker(BaseModel):
+
     """Тикер с флагом выбран или нет."""
 
     ticker: str
@@ -15,12 +16,14 @@ class Ticker(BaseModel):
 
 
 class DTO(BaseModel):
+
     """Перечень существующих тикеров с флагом выбраны или нет."""
 
     __root__: list[Ticker]
 
 
 class Service:
+
     """Сервис редактирования перечня выбранных тикеров."""
 
     def __init__(self, repo: repository.Repo, data_adapter: data.Adapter) -> None:

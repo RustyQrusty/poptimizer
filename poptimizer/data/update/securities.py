@@ -35,6 +35,7 @@ _COLUMNS: Final = (
 
 
 class Security(domain.Row):
+
     """Информация об отдельной бумаге.
 
     Бумага может быть выбрана для включения в портфель и отслеживания дивидендов.
@@ -70,6 +71,7 @@ class Security(domain.Row):
 
 
 class Table(domain.BaseEntity):
+
     """Таблица с торгуемыми бумагами."""
 
     group: ClassVar[domain.Group] = domain.Group.SECURITIES
@@ -94,6 +96,7 @@ class Table(domain.BaseEntity):
 
 
 class Service:
+
     """Сервис обновления перечня торгуемых бумаг."""
 
     def __init__(self, repo: repository.Repo, session: aiohttp.ClientSession) -> None:

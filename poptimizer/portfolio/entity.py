@@ -10,6 +10,7 @@ from poptimizer.core.exceptions import ClientError
 
 
 class Position(BaseModel):
+
     """Позиция в портфеле."""
 
     ticker: str
@@ -33,6 +34,7 @@ class Position(BaseModel):
 
 
 class Portfolio(domain.BaseEntity):
+
     """Портфель."""
 
     group: ClassVar[domain.Group] = domain.Group.PORTFOLIO
@@ -73,9 +75,8 @@ class Portfolio(domain.BaseEntity):
     def add_ticker(self, ticker: str) -> None:
         """Добавляет отсутствующий тикер в портфель."""
         count = bisect.bisect_left(self.positions, ticker, key=lambda position: position.ticker)
-        if count != len(self.positions):
-            if self.positions[count].ticker == ticker:
-                raise ClientError(f"can't add existing {ticker} in portfolio")
+        if count != len(self.positions) and self.positions[count].ticker == ticker:
+            raise ClientError(f"can't add existing {ticker} in portfolio")
 
         shares = {acc: 0 for acc in self.cash}
 

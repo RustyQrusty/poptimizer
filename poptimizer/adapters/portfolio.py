@@ -4,6 +4,7 @@ from poptimizer.portfolio import actor
 
 
 class Adapter:
+
     """Адаптер для просмотра информации о портфеле из других модулей."""
 
     def __init__(self, repo: repository.Repo) -> None:

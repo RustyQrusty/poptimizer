@@ -1,7 +1,8 @@
 """Актор, который восстанавливает и сохраняет бекап данных."""
 import logging
+from collections.abc import Iterable
 from pathlib import Path
-from typing import ClassVar, Final, Iterable, cast
+from typing import ClassVar, Final, cast
 
 import aiofiles
 import bson
@@ -13,6 +14,7 @@ _BACKUP_COLLECTIONS: Final = (domain.Group.RAW_DIV,)
 
 
 class Backup:
+
     """Актор, который восстанавливает и сохраняет бекап данных."""
 
     _dump: ClassVar = consts.ROOT_PATH / "dump"
@@ -41,12 +43,12 @@ class Backup:
         """Делает резервную копию группы объектов."""
         for group in groups:
             await self._backup(group)
-            self._logger.info(f"backup of {group} completed")
+            self._logger.info("backup of %s completed", group)
 
     async def _restore(self, group: domain.Group) -> None:
         path = self._backup_path(group)
         if not path.exists():
-            self._logger.warning(f"backup file for {group} don't exists")
+            self._logger.warning("backup file for %s doesn't exist", group)
 
             return
 
@@ -56,7 +58,7 @@ class Backup:
         collection = self._mongo[group.module][group.group]
 
         await collection.insert_many(bson.decode_all(raw))
-        self._logger.info(f"initial {group} created")
+        self._logger.info("initial %s created", group)
 
     async def _backup(self, group: domain.Group) -> None:
         path = self._backup_path(group)

@@ -32,10 +32,9 @@ tasks:
     desc: Format black and isort. Lint lint-imports, mypy and wemake-python-styleguide.
     cmds:
       - pdm run black {{.APP}}
-      - pdm run isort {{.APP}}
       - pdm run lint-imports
       - pdm run mypy {{.APP}}
-      - pdm run flake8p {{.APP}}
+      - pdm run ruff {{.APP}} --fix
 
   test:
     desc: Lint and test with pytest.
