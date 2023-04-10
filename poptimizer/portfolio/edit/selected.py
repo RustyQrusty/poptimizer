@@ -40,7 +40,7 @@ class Service:
         if len(dto_old.__root__) != len(dto.__root__):
             raise ClientError("wrong selected tickers dto length")
 
-        for row, row_old in zip(dto.__root__, dto_old.__root__):
+        for row, row_old in zip(dto.__root__, dto_old.__root__, strict=True):
             if row.ticker != row_old.ticker:
                 raise ClientError("wrong selected tickers dto sort order")
 

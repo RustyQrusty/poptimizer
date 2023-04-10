@@ -44,21 +44,19 @@ class Table(domain.BaseEntity):
 
     def has_date(self, date: datetime) -> bool:
         """Проверяет, есть ли в таблице указанная дата."""
-        df = self.df
-        pos = bisect.bisect_left(df, date, key=lambda row: row.date)
+        pos = bisect.bisect_left(self.df, date, key=lambda row: row.date)
 
-        return pos != len(df) and df[pos].date == date
+        return pos != len(self.df) and self.df[pos].date == date
 
     def has_row(self, raw_row: Raw) -> bool:
         """Проверяет, есть ли соответсвующая строка в таблице."""
-        df = self.df
         pos = bisect.bisect_left(
-            df,
+            self.df,
             raw_row.to_tuple(),
             key=lambda row: row.to_tuple(),
         )
 
-        return pos != len(df) and raw_row == df[pos]
+        return pos != len(self.df) and raw_row == self.df[pos]
 
     @validator("df")
     def _sorted_by_date_div_currency(cls, df: list[Raw]) -> list[Raw]:

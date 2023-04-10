@@ -34,7 +34,7 @@ tasks:
       - pdm run black {{.APP}}
       - pdm run lint-imports
       - pdm run mypy {{.APP}}
-      - pdm run ruff {{.APP}} --fix
+      - pdm run ruff {{.APP}}
 
   test:
     desc: Lint and test with pytest.

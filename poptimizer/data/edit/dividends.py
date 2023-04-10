@@ -4,12 +4,12 @@ from __future__ import annotations
 import asyncio
 import bisect
 import logging
-from datetime import datetime  # noqa: TCH003
+from datetime import datetime
 from enum import StrEnum, auto, unique
 
 from pydantic import BaseModel
 
-from poptimizer.core import backup, domain, repository  # noqa: TCH001
+from poptimizer.core import backup, domain, repository
 from poptimizer.core.exceptions import ClientError
 from poptimizer.data.update import securities
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry

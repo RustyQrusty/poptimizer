@@ -107,7 +107,7 @@ class Service:
 
         update.positions.sort(key=lambda pos: pos.ticker)
 
-        for pos_port, pos_update in zip(port.positions, update.positions):
+        for pos_port, pos_update in zip(port.positions, update.positions, strict=True):
             if pos_port.ticker != pos_update.ticker:
                 raise ClientError(f"wrong positions order {pos_update.ticker}")
 

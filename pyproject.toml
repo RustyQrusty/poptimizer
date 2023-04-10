@@ -79,10 +79,12 @@ omit = ["*/tests/*"]
 line-length = 120
 
 [tool.ruff]
-#line-length = 120
 select = ["ALL"]
+fixable = ["ALL"]
+fix = true
+
 ignore = [
-    "A003",  # Class attribute `open` is shadowing a python builtin
+    "A003",  # Class attribute is shadowing a python builtin
     "ANN101",  # Missing-type-self
     "ANN102",  # Missing-type-cls
     "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
@@ -92,14 +94,17 @@ ignore = [
     "DTZ",  # The use of `datetime` without `tzinfo` argument is not allowed - one tz zone
     "E501",  # Line too long - black
     "EM",  # Don't like many exception classes
-    "N805",  # First argument of a method should be named self - conflict with pydantic validator
     "RUF001", # Ambiguous-unicode-character-string - russian
     "RUF002", # Ambiguous-unicode-character-docstring - russian
     "RUF003", # Ambiguous-unicode-character-comment - russian
     "TRY003", # Avoid specifying long messages outside the exception class - don't like many exception classes
 ]
-fixable = ["ALL"]
-target-version = "py311"
+
+[tool.ruff.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["pydantic.validator", "pydantic.root_validator"]
 
 [tool.importlinter]
 root_package = "poptimizer"
