@@ -1,12 +1,11 @@
 """Сборка отдельных компонент."""
-from collections.abc import Callable
 
 import aiohttp
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from poptimizer.adapters import market_data, portfolio
 from poptimizer.app import config, lgr, telegram
-from poptimizer.core import actor, repository
+from poptimizer.core import actor, backup, repository
 from poptimizer.data.actor import MarketData
 from poptimizer.data.edit import dividends
 from poptimizer.data.update import (
@@ -71,7 +70,7 @@ def create_portfolio_updater(mongo: AsyncIOMotorClient) -> Portfolio:
 def create_server(
     cfg: config.Server,
     mongo: AsyncIOMotorClient,
-    backup_func: Callable[[], None],
+    backup_srv: backup.Backup,
 ) -> Server:
     """Создает сервер, показывающий SPA Frontend."""
     repo = repository.Repo(mongo)
@@ -82,5 +81,5 @@ def create_server(
         selected.Service(repo, market_data.Adapter(repo)),
         accounts.Service(repo),
         port_srv.Service(repo),
-        dividends.Service(repo, backup_func),
+        dividends.Service(repo, backup_srv),
     )

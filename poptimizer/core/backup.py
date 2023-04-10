@@ -8,13 +8,13 @@ import aiofiles
 import bson
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from poptimizer.core import actor, consts, domain
+from poptimizer.core import consts, domain
 
-BACKUP_COLLECTION: Final = domain.Group.RAW_DIV
+_BACKUP_COLLECTIONS: Final = (domain.Group.RAW_DIV,)
 
 
 class Backup:
-    """Актор, который восстанавливает и сохраняет бекап данных."""
+    """Сервис для восстановления и бекапа данных."""
 
     _dump: ClassVar = consts.ROOT_PATH / "dump"
 
@@ -22,15 +22,7 @@ class Backup:
         self._logger = logging.getLogger("Backup")
         self._mongo = mongo_client
 
-    async def __call__(self, ctx: actor.Ctx, msg: actor.SystemMsg | domain.Group) -> None:  # noqa: ARG002
-        """Обрабатывает сообщение."""
-        match msg:
-            case actor.SystemMsg.STARTING:
-                await self.restore((BACKUP_COLLECTION,))
-            case domain.Group():
-                await self.backup((msg,))
-
-    async def restore(self, groups: Iterable[domain.Group]) -> None:
+    async def restore(self, groups: Iterable[domain.Group] = _BACKUP_COLLECTIONS) -> None:
         """Восстанавливает резервную копию группы объектов при отсутствии данных в MongoDB."""
         for group in groups:
             if await self._mongo[group.module][group.group].count_documents({}):
@@ -38,7 +30,7 @@ class Backup:
 
             await self._restore(group)
 
-    async def backup(self, groups: Iterable[domain.Group]) -> None:
+    async def backup(self, groups: Iterable[domain.Group] = _BACKUP_COLLECTIONS) -> None:
         """Делает резервную копию группы объектов."""
         for group in groups:
             await self._backup(group)

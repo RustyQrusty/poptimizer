@@ -1,21 +1,18 @@
 """Редактирование вручную введенных дивидендов."""
 from __future__ import annotations
 
+import asyncio
 import bisect
 import logging
 from datetime import datetime  # noqa: TCH003
 from enum import StrEnum, auto, unique
-from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
 
-from poptimizer.core import domain, repository  # noqa: TCH001
+from poptimizer.core import backup, domain, repository  # noqa: TCH001
 from poptimizer.core.exceptions import ClientError
 from poptimizer.data.update import securities
 from poptimizer.data.update.raw import check_raw, nasdaq, reestry
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 
 class TickersDTO(BaseModel):
@@ -91,10 +88,10 @@ class SaveDividendsDTO(BaseModel):
 class Service:
     """Сервис редактирования перечня выбранных тикеров."""
 
-    def __init__(self, repo: repository.Repo, backup_func: Callable[[], None]) -> None:
+    def __init__(self, repo: repository.Repo, backup_srv: backup.Backup) -> None:
         self._logger = logging.getLogger("DivEdit")
         self._repo = repo
-        self._backup_func = backup_func
+        self._backup_srv = backup_srv
 
     async def get_tickers(self) -> TickersDTO:
         """Загружает информацию о тикерах."""
@@ -124,8 +121,9 @@ class Service:
 
         raw.update(timestamp, dividends.__root__)
 
-        await self._repo.save(raw)
-        self._backup_func()
+        async with asyncio.TaskGroup() as tg:
+            tg.create_task(self._repo.save(raw))
+            tg.create_task(self._backup_srv.backup())
 
     async def _get_ticker_description(self, ticker: str) -> tuple[securities.Security, datetime]:
         table = await self._repo.get(securities.Table)

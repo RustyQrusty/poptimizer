@@ -3,7 +3,8 @@ import asyncio
 
 import uvloop
 
-from poptimizer.app import backup, clients, config, modules
+from poptimizer.app import clients, config, modules
+from poptimizer.core import backup
 
 
 async def main() -> None:
@@ -18,10 +19,12 @@ async def main() -> None:
         clients.mongo(cfg.mongo.uri) as mongo,
         modules.create_root_actor(http, cfg.logger) as app,
     ):
-        backup_ref = app.spawn(backup.Backup(mongo))
+        backup_srv = backup.Backup(mongo)
+        await backup_srv.restore()
+
         port_ref = app.spawn(modules.create_portfolio_updater(mongo))
         app.spawn(modules.create_data_updater(http, mongo, [port_ref]))
-        app.spawn(modules.create_server(cfg.server, mongo, lambda: app.send(backup.BACKUP_COLLECTION, backup_ref)))
+        app.spawn(modules.create_server(cfg.server, mongo, backup_srv))
 
 
 if __name__ == "__main__":
