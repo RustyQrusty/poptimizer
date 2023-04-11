@@ -1,6 +1,7 @@
 """Сервис обновления данных о потребительской инфляции."""
 import io
 import logging
+import re
 import types
 from datetime import datetime, timedelta
 from typing import ClassVar, Final
@@ -14,7 +15,9 @@ from poptimizer.core import domain, repository
 from poptimizer.core.exceptions import DataUpdateError
 from poptimizer.data.update import validate
 
-_URL: Final = "https://rosstat.gov.ru/storage/mediabank/ipc_mes-1.xlsx"
+_PRICES_PAGE = "https://rosstat.gov.ru/statistics/price"
+_RE_FILE = re.compile(r"/[iI]pc[\-_]mes[\-_][0-9]{1,2}.xlsx")
+_URL_TMPL: Final = "https://rosstat.gov.ru/storage/mediabank/{}"
 _SHEET_NAME: Final = "01"
 
 _FIRST_MONTH_CELL: Final = "A6"
@@ -92,7 +95,18 @@ class Service:
         await self._repo.save(table)
 
     async def _download(self) -> io.BytesIO:
-        async with self._session.get(_URL) as resp:
+        async with self._session.get(_PRICES_PAGE) as resp:
+            if not resp.ok:
+                raise DataUpdateError(f"bad CPI respond status {resp.reason}")
+
+            html = await resp.text()
+
+        if (file_name := _RE_FILE.search(html)) is None:
+            raise DataUpdateError("can't find file with CPI")
+
+        cpi_url = _URL_TMPL.format(file_name.group(0))
+
+        async with self._session.get(cpi_url) as resp:
             if not resp.ok:
                 raise DataUpdateError(f"bad CPI respond status {resp.reason}")
 
