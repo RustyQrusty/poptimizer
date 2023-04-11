@@ -101,7 +101,7 @@ class MarketData:
                 await self._try_to_update(ctx)
             except DataUpdateError as err:
                 self._check_interval *= _BACK_OFF_FACTOR
-                self._logger.warning("can't complete update %s - waiting %s", err, self._checked_day)
+                self._logger.warning("can't complete update %s - waiting %s", err, self._check_interval)
             else:
                 self._check_interval = _CHECK_INTERVAL
 
