@@ -30,49 +30,36 @@ class Server:
         self._portfolio_srv = portfolio_srv
         self._dividends_srv = dividends_srv
 
-        self._server: web.AppRunner | None = None
-
-    async def __call__(self, ctx: Ctx, msg: SystemMsg) -> None:  # noqa: ARG002
+    async def __call__(self, ctx: Ctx, msg: SystemMsg) -> None:
         """Создает и останавливает сервер."""
         match msg:
             case SystemMsg.STARTING:
-                app = await self._mount_handlers_and_middleware()
+                server = await self._setup_server()
+                await ctx.done()
+                await server.cleanup()
 
-                if self._server is not None:
-                    self._logger.warning("already started")
+    async def _setup_server(self) -> web.AppRunner:
+        server = web.AppRunner(
+            app=await self._app_with_mounted_handlers_and_middleware(),
+            handle_signals=False,
+            access_log_class=logger.AccessLogger,
+            access_log=self._logger,
+        )
+        await server.setup()
+        site = web.TCPSite(
+            server,
+            self._host,
+            self._port,
+        )
+        await site.start()
+        self._logger.info(
+            "started on http://%s:%s - press CTRL+C to quit",
+            self._host,
+            self._port,
+        )
+        return server
 
-                    return
-
-                self._server = web.AppRunner(
-                    app,
-                    handle_signals=False,
-                    access_log_class=logger.AccessLogger,
-                    access_log=self._logger,
-                )
-                await self._server.setup()
-                site = web.TCPSite(
-                    self._server,
-                    self._host,
-                    self._port,
-                )
-
-                await site.start()
-
-                self._logger.info(
-                    "started on http://%s:%s - press CTRL+C to quit",
-                    self._host,
-                    self._port,
-                )
-
-            case SystemMsg.STOPPING:
-                if self._server is None:
-                    self._logger.warning("stopping before started")
-
-                    return
-
-                await self._server.cleanup()
-
-    async def _mount_handlers_and_middleware(self) -> web.Application:
+    async def _app_with_mounted_handlers_and_middleware(self) -> web.Application:
         app = web.Application(middlewares=[middleware.set_start_time_and_headers, middleware.error])
 
         views.Selected.register(app, self._selected_srv)
