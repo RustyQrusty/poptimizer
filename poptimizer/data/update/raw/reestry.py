@@ -52,7 +52,9 @@ class Service:
         try:
             row = _parse(html_page, preferred=status_row.preferred)
         except DataUpdateError as err:
-            raise DataUpdateError(f"can't parse {status_row.ticker}") from err
+            self._logger.warning("can't parse %s -> %s", status_row.ticker, err)
+
+            return
 
         table.update(update_day, row)
 
