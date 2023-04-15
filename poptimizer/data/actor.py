@@ -49,8 +49,6 @@ class MarketData:
     ) -> None:
         self._logger = logging.getLogger("MarketData")
         self._check_interval = _CHECK_INTERVAL
-        self._worker: asyncio.Task[None] | None = None
-        self._stop_event = asyncio.Event()
         self._checked_day = datetime.fromtimestamp(0)
 
         self._date_srv = date_srv
@@ -77,26 +75,15 @@ class MarketData:
         """
         match msg:
             case SystemMsg.STARTING:
-                if self._worker is not None:
-                    self._logger.warning("already started")
-
-                    return
-
-                self._worker = asyncio.create_task(self._run(ctx))
-            case SystemMsg.STOPPING:
-                if self._worker is None:
-                    self._logger.warning("stopping before started")
-
-                    return
-
-                self._stop_event.set()
-                await self._worker
+                await self._run(ctx)
 
     async def _run(self, ctx: Ctx) -> None:
         self._checked_day = await self._date_srv.get_date_from_local_store()
         self._logger.info("last update on %s", self._checked_day.date())
 
-        while not self._stop_event.is_set():
+        stopped_task = asyncio.create_task(ctx.done())
+
+        while not stopped_task.done():
             try:
                 await self._try_to_update(ctx)
             except DataUpdateError as err:
@@ -105,12 +92,7 @@ class MarketData:
             else:
                 self._check_interval = _CHECK_INTERVAL
 
-            aws = (asyncio.create_task(self._stop_event.wait()),)
-            await asyncio.wait(
-                aws,
-                timeout=self._check_interval.total_seconds(),
-                return_when=asyncio.FIRST_COMPLETED,
-            )
+            await asyncio.wait((stopped_task,), timeout=self._check_interval.total_seconds())
 
         self._logger.info("last update on %s", self._checked_day.date())
 
