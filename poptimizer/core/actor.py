@@ -33,6 +33,12 @@ class Ref:
 class Ctx(Protocol):
     """Контекст обработки сообщения актором."""
 
+    async def done(self) -> bool:
+        """Блокируется, пока контекст работает и возвращает True, когда останавливается.
+
+        Позволяет долгоиграющим задачам отслеживать момент, когда необходимо завершиться.
+        """
+
     def spawn(self, actor: Actor) -> Ref:
         """Запустить дочернего актора."""
 
@@ -68,12 +74,20 @@ class _Context:
         self._ref = Ref(actor)
         self._dispatcher = dispatcher
         inbox = dispatcher.register(self._ref)
+        self._done = asyncio.Event()
         self._actor = asyncio.create_task(self._runner(actor, inbox))
         self._children: set[_Context] = set()
 
     @property
     def ref(self) -> Ref:
         return self._ref
+
+    async def done(self) -> bool:
+        """Блокируется, пока контекст работает и возвращает True, когда останавливается.
+
+        Позволяет долгоиграющим задачам отслеживать момент, когда необходимо завершиться.
+        """
+        return await self._done.wait()
 
     def spawn(self, actor: Actor) -> Ref:
         """Запускает дочернего актора и возвращает ссылку на него."""
@@ -88,6 +102,7 @@ class _Context:
             for child in self._children:
                 tg.create_task(child.shutdown())
 
+        self._done.set()
         self.send(SystemMsg.STOPPING, self.ref)
         await self._actor
 
