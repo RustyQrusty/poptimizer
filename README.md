@@ -22,7 +22,7 @@ Install
 Usage
 ---------
 - `python3 poptimizer --help` for list commands
-- commands [\_\_main\_\_.py](https://github.com/RustyQrusty/poptimizer/blob/master/poptimizer/__main__.py)
+- commands [\_\_main\_\_.py](https://github.com/RustyQrusty/poptimizer/blob/master/server/src/poptimizer/__main__.py)
 
 Update dividents
 ---------
