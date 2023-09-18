@@ -49,7 +49,7 @@ class DescribedDataLoader(data.DataLoader):
         end: pd.Timestamp,
         params: PhenotypeData,
         params_type: Type[features.DataParams],
-        num_workers: int = 8
+        num_workers: int = 0
     ):
         """Формирует загрузчики данных для обучения, валидации, тестирования и прогнозирования для
         заданных тикеров и конечной даты на основе словаря с параметрами.
