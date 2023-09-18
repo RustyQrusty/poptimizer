@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+
+  database:
+    build: database/
+    container_name: poptimizer-database
+    ports:
+      - 27017:27017
+    volumes:
+      - database:/home/root/db
+      - dump:/home/root/src/dump
+
+  server:
+    build: server/
+    container_name: poptimizer-server
+    network_mode: host
+    runtime: runc
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    volumes:
+      - database:/home/root/db
+      - dump:/home/root/src/dump
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - database
+
+volumes:
+  database:
+  dump:
