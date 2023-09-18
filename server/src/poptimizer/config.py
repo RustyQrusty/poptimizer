@@ -12,10 +12,6 @@ from poptimizer.shared.log import get_handlers
 class POptimizerError(Exception):
     """Базовое исключение."""
 
-
-# Устройство на котором будет производиться обучение
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 # Количество колонок в распечатках без переноса на несколько страниц
 pd.set_option("display.max_columns", 20)
 pd.set_option("display.max_rows", None)
@@ -66,3 +62,6 @@ STOP_EVOLVE_HOUR = cast(int, _cfg.get("STOP_EVOLVE_HOUR", 1))
 OPTIMIZER = cast(str, _cfg.get("OPTIMIZER", "resample"))
 MIN_TEST_DAYS = cast(int, _cfg.get("MIN_TEST_DAYS", 27)) * MONTH_IN_TRADING_DAYS
 TARGET_POPULATION = cast(int, _cfg.get("TARGET_POPULATION", 100))
+DEVICE = cast(str, _cfg.get("DEVICE", "cpu"))
+
+torch.device(DEVICE)

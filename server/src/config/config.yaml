@@ -19,7 +19,7 @@ HISTORY_DAYS_MIN: 3
 # Час начала работы включительно.
 START_EVOLVE_HOUR: 1
 # Час окончания работы не включительно.
-STOP_EVOLVE_HOUR: 13
+STOP_EVOLVE_HOUR: 1
 
 # Транзакционные издержки на одну сделку в %.
 COSTS: 0.1
@@ -45,3 +45,5 @@ OPTIMIZER: "resample"
 MIN_TEST_DAYS: 8
 
 TARGET_POPULATION: 100
+
+DEVICE: "cpu"

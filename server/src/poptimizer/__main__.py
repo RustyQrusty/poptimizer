@@ -6,7 +6,8 @@ import typer
 from poptimizer import config
 from poptimizer.data.views import div_status
 from poptimizer.evolve import Evolution
-from poptimizer.portfolio import load_from_yaml, optimizer_hmean, optimizer_resample, Portfolio
+from poptimizer.portfolio import load_from_yaml, optimizer_hmean, optimizer_resample
+
 
 LOGGER = logging.getLogger()
 
